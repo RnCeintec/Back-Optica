@@ -1,0 +1,11 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var express_1 = require("express");
+var proveedor_controller_1 = require("../controllers/proveedor.controller");
+var router = (0, express_1.Router)();
+router.post("/proveedor", proveedor_controller_1.createProveedor);
+router.put("/proveedor/:id", proveedor_controller_1.updateProveedor);
+router.delete("/proveedor/:id", proveedor_controller_1.deleteProveedor);
+router.get("/proveedor", proveedor_controller_1.listProveedor);
+router.get("/proveedor/:id", proveedor_controller_1.searchProveedor);
+exports.default = router;

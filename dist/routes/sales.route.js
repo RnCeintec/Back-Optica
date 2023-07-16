@@ -1,0 +1,16 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var tslib_1 = require("tslib");
+var express_1 = require("express");
+var sales_controller_1 = require("../controllers/sales.controller");
+var validateUser_1 = tslib_1.__importDefault(require("../security/validateUser"));
+var router = (0, express_1.Router)();
+router.get("/ventas", sales_controller_1.listaVentas);
+router.post("/sale", sales_controller_1.createSale);
+router.put("/sale/:id", [validateUser_1.default], sales_controller_1.updateSale);
+router.delete("/sale/:id", sales_controller_1.deleteSale);
+router.get("/sale", sales_controller_1.listSale);
+router.get("/sale/:id", sales_controller_1.searchSale);
+router.get("/SaleFechas", sales_controller_1.searchSaleXDate);
+router.get("/detail/sale/:id", sales_controller_1.searchSaleDetails);
+exports.default = router;

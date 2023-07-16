@@ -1,0 +1,13 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var tslib_1 = require("tslib");
+var express_1 = require("express");
+var user_controller_1 = require("../controllers/user.controller");
+var validateUser_1 = tslib_1.__importDefault(require("../security/validateUser"));
+var router = (0, express_1.Router)();
+router.post('/users', user_controller_1.createUser);
+router.put('/users/:id', user_controller_1.updateUser);
+router.delete('/users/:id', [validateUser_1.default], user_controller_1.deleteUser);
+router.get('/users', user_controller_1.listUsers);
+router.get('/users/:id', user_controller_1.searchUser);
+exports.default = router;

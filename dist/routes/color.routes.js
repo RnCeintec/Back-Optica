@@ -1,0 +1,11 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var express_1 = require("express");
+var color_controller_1 = require("../controllers/color.controller");
+var router = (0, express_1.Router)();
+router.post('/color', color_controller_1.createColor);
+router.put('/color/:id', color_controller_1.updateColor);
+router.delete('/color/:id', color_controller_1.deleteColor);
+router.get('/color', color_controller_1.listColors);
+router.get('/color/:id', color_controller_1.searchColor);
+exports.default = router;

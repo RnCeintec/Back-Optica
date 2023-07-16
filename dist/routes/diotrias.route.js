@@ -1,0 +1,11 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var express_1 = require("express");
+var diotrias_controller_1 = require("../controllers/diotrias.controller");
+var router = (0, express_1.Router)();
+router.post('/diotrias', diotrias_controller_1.createDiotrias);
+router.put('/diotrias/:id', diotrias_controller_1.updateDiotrias);
+router.delete('/diotrias/:id', diotrias_controller_1.deleteDiotrias);
+router.get('/diotrias', diotrias_controller_1.listDiotrias);
+router.get('/diotrias/:id', diotrias_controller_1.searchDiotrias);
+exports.default = router;

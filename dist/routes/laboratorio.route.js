@@ -1,0 +1,15 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var express_1 = require("express");
+var laboratorio_controller_1 = require("../controllers/laboratorio.controller");
+var router = (0, express_1.Router)();
+router.post("/laboratorio", laboratorio_controller_1.createLaboratorio);
+router.put("/laboratorio/:id", laboratorio_controller_1.updateLaboratorio);
+router.delete("/laboratorio/:id", laboratorio_controller_1.deleteLaboratorio);
+router.get("/laboratorio", laboratorio_controller_1.listLaboratorio);
+router.get("/productolab", laboratorio_controller_1.listProducto);
+router.get("/proxlab", laboratorio_controller_1.listProductothisLab);
+router.get("/proxdetalle", laboratorio_controller_1.listProductoDetalle);
+router.get("/detallexprod", laboratorio_controller_1.listDetallethisProd);
+router.get("/laboratorio/:id", laboratorio_controller_1.searchLaboratorio);
+exports.default = router;
