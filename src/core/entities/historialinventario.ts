@@ -31,6 +31,10 @@ import {
 
     @ManyToOne(() => Shop, (tienda) => tienda.historialinventarios)
     tienda!: Shop;
+
+
+   
+  
   
   
     @OneToMany(() => Detalleinventario, (detalleinv) => detalleinv.historialinventario)

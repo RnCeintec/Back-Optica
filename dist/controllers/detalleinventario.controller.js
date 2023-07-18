@@ -1,7 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createDetalleinventario = exports.createHistorialinventario = void 0;
+exports.listaInventario = exports.createDetalleinventario = exports.createHistorialinventario = void 0;
 var tslib_1 = require("tslib");
+var entities_1 = require("../core/entities");
 var typeorm_1 = require("typeorm");
 var historialinventario_1 = require("../core/entities/historialinventario");
 var detalleinventario_1 = require("../core/entities/detalleinventario");
@@ -54,3 +55,43 @@ var createDetalleinventario = function (req, res) { return tslib_1.__awaiter(voi
     });
 }); };
 exports.createDetalleinventario = createDetalleinventario;
+var listaInventario = function (req, res) { return tslib_1.__awaiter(void 0, void 0, void 0, function () {
+    var _a, limit, offset, tienda, where, tiendas, _b, result, count, error_3;
+    var _c;
+    return tslib_1.__generator(this, function (_d) {
+        switch (_d.label) {
+            case 0:
+                _d.trys.push([0, 4, , 5]);
+                _a = req.query, limit = _a.limit, offset = _a.offset, tienda = _a.tienda;
+                where = void 0;
+                if (!tienda) return [3, 2];
+                return [4, (0, typeorm_1.getRepository)(entities_1.Shop).findAndCount({
+                        where: { id: tienda, isActive: true },
+                    })];
+            case 1:
+                tiendas = _d.sent();
+                if (!tiendas) {
+                    return [2, res.status(404).json({ message: "No existe la tienda" })];
+                }
+                where = {
+                    tienda: tiendas,
+                };
+                _d.label = 2;
+            case 2: return [4, (0, typeorm_1.getRepository)(historialinventario_1.Historialinventario).findAndCount()];
+            case 3:
+                _b = _d.sent(), result = _b[0], count = _b[1];
+                return [2, result
+                        ? res.status(200).json({
+                            result: result,
+                            count: count,
+                            pages: 1,
+                        })
+                        : res.status(404).json({ message: 'No existen Historail Inventarios' })];
+            case 4:
+                error_3 = _d.sent();
+                throw res.status(500).json({ message: (_c = error_3.message) !== null && _c !== void 0 ? _c : error_3 });
+            case 5: return [2];
+        }
+    });
+}); };
+exports.listaInventario = listaInventario;

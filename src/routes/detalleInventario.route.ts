@@ -1,10 +1,11 @@
 import {Router} from 'express'
-import {createHistorialinventario, createDetalleinventario} from '../controllers/detalleinventario.controller'
+import {createHistorialinventario, createDetalleinventario,listaInventario} from '../controllers/detalleinventario.controller'
 
 const router = Router()
 
 router.post('/Historialinventario',createHistorialinventario);
 router.post('/Detalleinventario', createDetalleinventario);
+router.get('/MonturasInventario', listaInventario);
 
 
 

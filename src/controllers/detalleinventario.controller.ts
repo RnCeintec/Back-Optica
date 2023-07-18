@@ -7,6 +7,7 @@ import { Historialinventario } from '../core/entities/historialinventario'
 import { Detalleinventario } from '../core/entities/detalleinventario'
 
 import { createDetalleinventarioInteractor } from  '../core/interactor/inventario';
+import { createHistorialinventarioInteractor} from  '../core/interactor/inventario_Historial';
 import { encrypt } from '../utils';
 import { Hateoas } from '../utils';
 
@@ -57,18 +58,18 @@ export const createDetalleinventario = async (req: Request, res: Response): Prom
 
  export const listaInventario = async (req: Request, res: Response): Promise<Response> => {
   try {
-    const { tienda,ventasExiste } = req.query;
+    const {limit, offset, tienda } = req.query;
     let where:
     | string
     | ObjectLiteral
     | FindConditions<Historialinventario>
     | FindConditions<Historialinventario>[]
-    | undefined = { isActive: true};
+    | undefined;
 
     if (tienda) {
 
-      const tiendas = await getRepository(Shop).findOne({
-        where: { id: tienda, isActive: true },
+      const tiendas = await getRepository(Shop).findAndCount({
+        where: {  id: tienda, isActive: true  },
          });
 
       if (!tiendas) {
@@ -77,25 +78,18 @@ export const createDetalleinventario = async (req: Request, res: Response): Prom
 
       where = {
         tienda: tiendas,
-        isActive: true
       }
 
     }
-    var [result, count] = await getRepository(Historialinventario).findAndCount({
-      where: [
-        where
-      ],
-   
-      relations: ['tienda', 'detalleinv'],
-      order: { fecha: "DESC" }
-    });
+    var [result, count]= await getRepository(Historialinventario).findAndCount();
 
      return result
       ? res.status(200).json({
         result,
         count,
+        pages:1,
       })
-      : res.status(404).json({ message: 'No existen Inventarios' });
+      : res.status(404).json({ message: 'No existen Historail Inventarios' });
   } catch (error: any) {
     throw res.status(500).json({ message: error.message ?? error })
   }
