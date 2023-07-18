@@ -6,6 +6,7 @@ var typeorm_1 = require("typeorm");
 var _1 = require(".");
 var ingreso_monturas_1 = require("./ingreso_monturas");
 var shop_1 = require("./shop");
+var detalleinventario_1 = require("./detalleinventario");
 var Monturas = (function () {
     function Monturas() {
     }
@@ -107,6 +108,10 @@ var Monturas = (function () {
         (0, typeorm_1.UpdateDateColumn)(),
         tslib_1.__metadata("design:type", Date)
     ], Monturas.prototype, "fecha_actualizacion", void 0);
+    tslib_1.__decorate([
+        (0, typeorm_1.OneToMany)(function () { return detalleinventario_1.Detalleinventario; }, function (detalleinv) { return detalleinv.monturas; }),
+        tslib_1.__metadata("design:type", detalleinventario_1.Detalleinventario)
+    ], Monturas.prototype, "detalleinv", void 0);
     Monturas = tslib_1.__decorate([
         (0, typeorm_1.Entity)({ name: 'monturas' })
     ], Monturas);

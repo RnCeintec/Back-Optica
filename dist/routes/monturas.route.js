@@ -9,5 +9,6 @@ router.delete('/monturas/:id', monturas_controller_1.deleteMontura);
 router.get('/monturas', monturas_controller_1.listMonturas);
 router.get('/ultimaMonturas', monturas_controller_1.ultimaMontura);
 router.get('/monturasventa', monturas_controller_1.listMonturasSinComprar);
+router.get('/MonturasCompleta', monturas_controller_1.listCompletaMonturas);
 router.get('/monturas/:id', monturas_controller_1.searchMontura);
 exports.default = router;

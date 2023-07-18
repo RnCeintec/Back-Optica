@@ -17,6 +17,7 @@ import monturasRoute from "./monturas.route";
 import proveedorRoute from "./proveedor.route";
 import laboratorioRoute from "./laboratorio.route";
 import diotriasRoute from "./diotrias.route";
+import detalleInventarioRoute from "./detalleInventario.route";
 
 export default ({ app, version }: { app: Express; version: string }) => {
   app.use(version, userRoute);
@@ -35,5 +36,6 @@ export default ({ app, version }: { app: Express; version: string }) => {
   app.use(version, clientfacturaRoute);
   app.use(version, diotriasRoute);
   app.use(version, colorRoute);
+  app.use(version,detalleInventarioRoute);
 
 };

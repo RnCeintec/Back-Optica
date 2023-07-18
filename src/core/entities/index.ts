@@ -11,3 +11,5 @@ export { Proveedor } from "./proveedor";
 export { Laboratorio } from "./laboratorio";
 export { ClientFactura } from "./client_factura";
 export { Diotrias } from "./dioptrias";
+export { Historialinventario } from "./historialinventario";
+export { Detalleinventario } from "./detalleinventario";

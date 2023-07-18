@@ -5,6 +5,7 @@ var tslib_1 = require("tslib");
 var typeorm_1 = require("typeorm");
 var dioptrias_1 = require("./dioptrias");
 var monturas_1 = require("./monturas");
+var historialinventario_1 = require("./historialinventario");
 var sales_1 = require("./sales");
 var Shop = (function () {
     function Shop() {
@@ -71,6 +72,10 @@ var Shop = (function () {
         (0, typeorm_1.OneToMany)(function () { return monturas_1.Monturas; }, function (monturas) { return monturas.tienda; }),
         tslib_1.__metadata("design:type", Array)
     ], Shop.prototype, "monturas", void 0);
+    tslib_1.__decorate([
+        (0, typeorm_1.OneToMany)(function () { return historialinventario_1.Historialinventario; }, function (historialinventario) { return historialinventario.tienda; }),
+        tslib_1.__metadata("design:type", historialinventario_1.Historialinventario)
+    ], Shop.prototype, "historialinventarios", void 0);
     tslib_1.__decorate([
         (0, typeorm_1.OneToMany)(function () { return dioptrias_1.Diotrias; }, function (diotrias) { return diotrias.tienda; }),
         tslib_1.__metadata("design:type", dioptrias_1.Diotrias)

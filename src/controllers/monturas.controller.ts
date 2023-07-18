@@ -429,3 +429,69 @@ if(ventasExiste){
     throw res.status(500).json({ message: error.message ?? error })
   }
 }
+
+
+
+export const listCompletaMonturas= async (req: Request, res: Response): Promise<Response> => {
+  try {
+    const { limit, offset, tienda,ventasExiste } = req.query;
+    let where:
+    | string
+    | ObjectLiteral
+    | FindConditions<Monturas>
+    | FindConditions<Monturas>[]
+    | undefined = { isActive: true};
+
+    if (tienda) {
+
+      const tiendas = await getRepository(Shop).findOne({
+        where: { id: tienda, isActive: true },
+      });
+
+      if (!tiendas) {
+        return res.status(404).json({ message: "No existe la tienda" })
+      }
+
+      where = {
+        tienda: tiendas,
+        isActive: true
+      }
+
+    }
+    var [result, count] = await getRepository(Monturas).findAndCount({
+      where: [
+        where
+      ],
+   
+      relations: ['tienda', 'ventas'],
+      order: { fecha_actualizacion: "DESC" }
+    });
+
+    
+if(ventasExiste){
+  if(ventasExiste==="0")
+  {
+    result = result.filter( montura => !montura.ventas)
+  }
+
+  if(ventasExiste==="1")
+  {
+    result = result.filter( montura => montura.ventas)
+  }
+  
+
+}
+    return result
+      ? res.status(200).json({
+        result,
+        count,
+        pages:1,
+      })
+      : res.status(404).json({ message: 'No existen monturas' });
+  } catch (error: any) {
+    throw res.status(500).json({ message: error.message ?? error })
+  }
+}
+
+
+

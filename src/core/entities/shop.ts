@@ -9,7 +9,7 @@ import {
 } from "typeorm";
 import { Diotrias } from "./dioptrias";
 import { Monturas } from "./monturas";
-
+import { Historialinventario } from "./historialinventario";
 import { Sales } from "./sales";
 
 @Entity({ name: "local" })
@@ -60,6 +60,10 @@ export class Shop {
 
   @OneToMany(() => Monturas, (monturas) => monturas.tienda)
   monturas!: Monturas[];
+
+  @OneToMany(() => Historialinventario, (historialinventario) => historialinventario.tienda)
+  historialinventarios!: Historialinventario;
+
 
   @OneToMany(() => Diotrias, (diotrias) => diotrias.tienda)
   diotrias!: Diotrias;

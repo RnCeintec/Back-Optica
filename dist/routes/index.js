@@ -17,6 +17,7 @@ var monturas_route_1 = tslib_1.__importDefault(require("./monturas.route"));
 var proveedor_route_1 = tslib_1.__importDefault(require("./proveedor.route"));
 var laboratorio_route_1 = tslib_1.__importDefault(require("./laboratorio.route"));
 var diotrias_route_1 = tslib_1.__importDefault(require("./diotrias.route"));
+var detalleInventario_route_1 = tslib_1.__importDefault(require("./detalleInventario.route"));
 exports.default = (function (_a) {
     var app = _a.app, version = _a.version;
     app.use(version, user_router_1.default);
@@ -35,4 +36,5 @@ exports.default = (function (_a) {
     app.use(version, client_factura_route_1.default);
     app.use(version, diotrias_route_1.default);
     app.use(version, color_routes_1.default);
+    app.use(version, detalleInventario_route_1.default);
 });

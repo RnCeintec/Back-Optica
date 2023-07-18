@@ -10,6 +10,7 @@ import {
 import { Sales } from '.';
 import { IngresoMonturas } from './ingreso_monturas';
 import { Shop } from './shop';
+import { Detalleinventario } from './detalleinventario';
 
 @Entity({ name: 'monturas' })
 export class Monturas {
@@ -93,6 +94,10 @@ export class Monturas {
   @UpdateDateColumn()
   fecha_actualizacion!: Date;
 
+
+ 
+  @OneToMany(() => Detalleinventario, (detalleinv) => detalleinv.monturas)
+  detalleinv!:Detalleinventario;
 
 
 
