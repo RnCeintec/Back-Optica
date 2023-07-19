@@ -74,7 +74,7 @@ var Shop = (function () {
     ], Shop.prototype, "monturas", void 0);
     tslib_1.__decorate([
         (0, typeorm_1.OneToMany)(function () { return historialinventario_1.Historialinventario; }, function (historialinventario) { return historialinventario.tienda; }),
-        tslib_1.__metadata("design:type", Array)
+        tslib_1.__metadata("design:type", historialinventario_1.Historialinventario)
     ], Shop.prototype, "historialinventarios", void 0);
     tslib_1.__decorate([
         (0, typeorm_1.OneToMany)(function () { return dioptrias_1.Diotrias; }, function (diotrias) { return diotrias.tienda; }),

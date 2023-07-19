@@ -62,7 +62,7 @@ export class Shop {
   monturas!: Monturas[];
 
   @OneToMany(() => Historialinventario, (historialinventario) => historialinventario.tienda)
-  historialinventarios!: Historialinventario[];
+  historialinventarios!: Historialinventario;
 
 
   @OneToMany(() => Diotrias, (diotrias) => diotrias.tienda)

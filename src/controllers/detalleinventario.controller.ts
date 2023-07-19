@@ -1,13 +1,12 @@
 import { Shop } from '../core/entities';
 import { Response, Request } from 'express'
-import { getRepository, ObjectLiteral, FindConditions, In, Like, Raw } from 'typeorm'
+import {getRepository, ObjectLiteral, FindConditions, In, Like, Raw } from 'typeorm'
 import { Monturas } from '../core/entities/monturas'
 import { Historialinventario } from '../core/entities/historialinventario'
 
 import { Detalleinventario } from '../core/entities/detalleinventario'
 
 import { createDetalleinventarioInteractor } from  '../core/interactor/inventario';
-import { createHistorialinventarioInteractor} from  '../core/interactor/inventario_Historial';
 import { encrypt } from '../utils';
 import { Hateoas } from '../utils';
 
@@ -56,41 +55,72 @@ export const createDetalleinventario = async (req: Request, res: Response): Prom
   }
  }
 
+
+
  export const listaInventario = async (req: Request, res: Response): Promise<Response> => {
   try {
-    const {limit, offset, tienda } = req.query;
+    const { tienda} = req.query;
     let where:
     | string
     | ObjectLiteral
     | FindConditions<Historialinventario>
     | FindConditions<Historialinventario>[]
-    | undefined;
+    | undefined  = {};
 
     if (tienda) {
 
-      const tiendas = await getRepository(Shop).findAndCount({
-        where: {  id: tienda, isActive: true  },
-         });
+      const tiendas = await getRepository(Shop).findOne({
+        where: { id: tienda, isActive: true },
+      });
 
       if (!tiendas) {
-         return res.status(404).json({ message: "No existe la tienda" })
-                  }
+        return res.status(404).json({ message: "No existe la tienda" })
+      }
 
       where = {
-        tienda: tiendas,
+        tienda: tiendas
       }
 
     }
-    var [result, count]= await getRepository(Historialinventario).findAndCount();
+
+    var [result, count] = await getRepository(Historialinventario).findAndCount({
+      where: [
+        where
+      ],
+      relations: ['detalleinv'],
+      order: { fecha: "DESC" }
+
+    }
+    )
 
      return result
       ? res.status(200).json({
         result,
         count,
-        pages:1,
-      })
-      : res.status(404).json({ message: 'No existen Historail Inventarios' });
+        pages:1})
+      : res.status(404).json({ message: 'No existen Inventarios' });
   } catch (error: any) {
     throw res.status(500).json({ message: error.message ?? error })
   }
+}
+ 
+
+
+
+
+export const searchDetalleInventario = async (req: Request, res: Response): Promise<Response> => {
+
+  try {
+    const montura = await getRepository(Detalleinventario).find(
+      { where: { iddetalle: req.params.id } })
+    if (!montura) {
+      return res.status(404).json({ message: "No existe el montura" })
+    }
+    return res.status(200).json({ result: montura })
+  } catch (error: any) {
+    throw res.status(500).json({ message: error.message ?? error })
+
+  }
+
+
 }
