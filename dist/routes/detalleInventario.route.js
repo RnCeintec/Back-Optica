@@ -6,4 +6,5 @@ var router = (0, express_1.Router)();
 router.post('/Historialinventario', detalleinventario_controller_1.createHistorialinventario);
 router.post('/Detalleinventario', detalleinventario_controller_1.createDetalleinventario);
 router.get('/MonturasInventario', detalleinventario_controller_1.listaInventario);
+router.get('/searchDetalleInventario/:id', detalleinventario_controller_1.searchDetalleInventario);
 exports.default = router;

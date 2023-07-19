@@ -102,19 +102,19 @@ var listaInventario = function (req, res) { return tslib_1.__awaiter(void 0, voi
 }); };
 exports.listaInventario = listaInventario;
 var searchDetalleInventario = function (req, res) { return tslib_1.__awaiter(void 0, void 0, void 0, function () {
-    var montura, error_4;
+    var detalle, error_4;
     var _a;
     return tslib_1.__generator(this, function (_b) {
         switch (_b.label) {
             case 0:
                 _b.trys.push([0, 2, , 3]);
-                return [4, (0, typeorm_1.getRepository)(detalleinventario_1.Detalleinventario).find({ where: { iddetalle: req.params.id } })];
+                return [4, (0, typeorm_1.getRepository)(detalleinventario_1.Detalleinventario).find({ where: { historialinventario: req.params.id } })];
             case 1:
-                montura = _b.sent();
-                if (!montura) {
-                    return [2, res.status(404).json({ message: "No existe el montura" })];
+                detalle = _b.sent();
+                if (!detalle) {
+                    return [2, res.status(404).json({ message: "No existe el detalle" })];
                 }
-                return [2, res.status(200).json({ result: montura })];
+                return [2, res.status(200).json({ result: detalle })];
             case 2:
                 error_4 = _b.sent();
                 throw res.status(500).json({ message: (_a = error_4.message) !== null && _a !== void 0 ? _a : error_4 });

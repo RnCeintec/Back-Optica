@@ -17,7 +17,12 @@ var Detalleinventario = (function () {
         tslib_1.__metadata("design:type", historialinventario_1.Historialinventario)
     ], Detalleinventario.prototype, "historialinventario", void 0);
     tslib_1.__decorate([
-        (0, typeorm_1.ManyToOne)(function () { return _1.Monturas; }, function (monturas) { return monturas.detalleinv; }),
+        (0, typeorm_1.Column)({ nullable: true }),
+        tslib_1.__metadata("design:type", Number)
+    ], Detalleinventario.prototype, "monturasId", void 0);
+    tslib_1.__decorate([
+        (0, typeorm_1.ManyToOne)((function (type) { return _1.Monturas; })),
+        (0, typeorm_1.JoinColumn)(),
         tslib_1.__metadata("design:type", _1.Monturas)
     ], Detalleinventario.prototype, "monturas", void 0);
     Detalleinventario = tslib_1.__decorate([

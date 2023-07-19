@@ -111,12 +111,12 @@ export const createDetalleinventario = async (req: Request, res: Response): Prom
 export const searchDetalleInventario = async (req: Request, res: Response): Promise<Response> => {
 
   try {
-    const montura = await getRepository(Detalleinventario).find(
-      { where: { iddetalle: req.params.id } })
-    if (!montura) {
-      return res.status(404).json({ message: "No existe el montura" })
+    const detalle = await getRepository(Detalleinventario).find(
+      { where: { historialinventario: req.params.id} })
+    if (!detalle) {
+      return res.status(404).json({ message: "No existe el detalle" })
     }
-    return res.status(200).json({ result: montura })
+    return res.status(200).json({ result: detalle })
   } catch (error: any) {
     throw res.status(500).json({ message: error.message ?? error })
 

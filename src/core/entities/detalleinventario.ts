@@ -5,7 +5,8 @@ import {
     CreateDateColumn,
     UpdateDateColumn,
     OneToMany,
-    ManyToOne
+    ManyToOne,
+    JoinColumn
   } from 'typeorm';
   import { Monturas } from '.';
   import { Historialinventario } from './historialinventario';
@@ -20,9 +21,13 @@ import {
     historialinventario!: Historialinventario;
   
   
+
+    @Column({ nullable: true })
+    monturasId!: number
    
-    @ManyToOne(() => Monturas, (monturas )=> monturas.detalleinv)
-     monturas!:Monturas ;
+    @ManyToOne(((type)=>Monturas))
+    @JoinColumn()
+     monturas!:Monturas;
   
   
   
