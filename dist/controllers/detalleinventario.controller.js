@@ -42,7 +42,7 @@ var createDetalleinventario = function (req, res) { return tslib_1.__awaiter(voi
                 _a = req.body, historialId = _a.historialId, monturasId = _a.monturasId;
                 detalle_inventario = new detalleinventario_1.Detalleinventario();
                 detalle_inventario.historialinventario = historialId;
-                detalle_inventario.monturas = monturasId;
+                detalle_inventario.monturasId = monturasId;
                 return [4, (0, inventario_1.createDetalleinventarioInteractor)(detalle_inventario)];
             case 1:
                 result = _c.sent();

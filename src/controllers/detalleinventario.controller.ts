@@ -44,7 +44,7 @@ export const createDetalleinventario = async (req: Request, res: Response): Prom
 
     const detalle_inventario  = new Detalleinventario()
     detalle_inventario.historialinventario = historialId
-    detalle_inventario.monturas = monturasId
+    detalle_inventario.monturasId = monturasId
 
     const result = await createDetalleinventarioInteractor(detalle_inventario)
 
