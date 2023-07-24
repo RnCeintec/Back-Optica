@@ -125,6 +125,10 @@ export const listProducts = async (req:Request,res:Response): Promise<Response> 
       }
 }
 
+
+
+
+
 export const listProductsParaVenta = async (req:Request,res:Response): Promise<Response> =>{
   try {
       const {limit, offset, search } = req.query;

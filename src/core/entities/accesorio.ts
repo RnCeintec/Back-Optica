@@ -4,8 +4,9 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany
 } from 'typeorm';
-
+import { Stock } from './stock';
 
 @Entity({ name: 'accesorio' })
 export class Accesorio {
@@ -44,6 +45,9 @@ export class Accesorio {
 
     @Column()
     @CreateDateColumn()
-    fecha_vencimiento!: Date; // para un futuro
-  
-}
+    fecha_vencimiento!: Date;
+    
+    
+    @OneToMany(() => Stock, (stock) => stock.tienda)
+    stocks!: Stock;
+}  
