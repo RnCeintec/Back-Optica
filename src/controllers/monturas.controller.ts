@@ -190,6 +190,7 @@ export const listMonturas = async (req: Request, res: Response): Promise<Respons
       }
 
     }
+    
     if(tienda != ""){
       var [result, count] = await getRepository(Monturas).findAndCount({
         take,

@@ -38,4 +38,6 @@ export default ({ app, version }: { app: Express; version: string }) => {
   app.use(version, colorRoute);
   app.use(version,detalleInventarioRoute);
 
+
+
 };

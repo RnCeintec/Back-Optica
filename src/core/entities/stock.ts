@@ -5,7 +5,8 @@ import {
     CreateDateColumn,
     UpdateDateColumn,
     OneToMany,
-    ManyToOne
+    ManyToOne,
+    JoinColumn
   } from 'typeorm';
   import { Shop } from './shop';
   import { Accesorio } from './accesorio'
@@ -14,16 +15,28 @@ import { access } from 'fs';
   
   @Entity({ name: 'stock' })
   export class Stock {
+    
     @PrimaryGeneratedColumn()
-    idproducto!: number;
+    id!: number;
 
-    @PrimaryGeneratedColumn()
-    idTienda!: number;
+    @ManyToOne(() => Accesorio, (accesorio: Accesorio) => accesorio.stocks)
+    @JoinColumn()
+    accesorio!: Accesorio;
+    @Column()
+    accesorioId!: number;  
+
+    @ManyToOne(() => Shop, (tienda: Shop) => tienda.stocks)
+    @JoinColumn()
+    tienda!: Shop;  
+    
+    @Column()
+    tiendaId!: number;
+
 
     @Column()
-    canttienda!: number;
+    cant_tienda!: number;
 
-    @Column()
+    @Column({nullable: true})
     smt!: number;
 
 
@@ -35,15 +48,8 @@ import { access } from 'fs';
     @UpdateDateColumn()
     fecha_actualizacion!: Date;
 
-
-
-    @ManyToOne(() => Shop, (tienda) => tienda.stocks)
-    tienda!: Shop;
-
+ 
    
-    @ManyToOne(() => Accesorio, (accesorio) => accesorio.stocks)
-    accesorio!: Accesorio;
-  
   
   
   }

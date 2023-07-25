@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Detalleinventario = exports.Historialinventario = exports.Diotrias = exports.ClientFactura = exports.Laboratorio = exports.Proveedor = exports.Monturas = exports.Vendedor = exports.User = exports.Client = exports.Shop = exports.PymentType = exports.Accesorio = exports.SalesDetails = exports.Sales = void 0;
+exports.Stock = exports.Detalleinventario = exports.Historialinventario = exports.Diotrias = exports.ClientFactura = exports.Laboratorio = exports.Proveedor = exports.Monturas = exports.Vendedor = exports.User = exports.Client = exports.Shop = exports.PymentType = exports.Accesorio = exports.SalesDetails = exports.Sales = void 0;
 var sales_1 = require("./sales");
 Object.defineProperty(exports, "Sales", { enumerable: true, get: function () { return sales_1.Sales; } });
 var salesDetails_1 = require("./salesDetails");
@@ -31,3 +31,5 @@ var historialinventario_1 = require("./historialinventario");
 Object.defineProperty(exports, "Historialinventario", { enumerable: true, get: function () { return historialinventario_1.Historialinventario; } });
 var detalleinventario_1 = require("./detalleinventario");
 Object.defineProperty(exports, "Detalleinventario", { enumerable: true, get: function () { return detalleinventario_1.Detalleinventario; } });
+var stock_1 = require("./stock");
+Object.defineProperty(exports, "Stock", { enumerable: true, get: function () { return stock_1.Stock; } });

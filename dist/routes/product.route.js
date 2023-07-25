@@ -9,4 +9,5 @@ router.delete('/accesorios/:id', product_controller_1.deleteProduct);
 router.get('/accesorios', product_controller_1.listProducts);
 router.get('/accesoriosVenta', product_controller_1.listProductsParaVenta);
 router.get('/accesorios/:id', product_controller_1.searchProduct);
+router.get('/stock/', product_controller_1.listaStock);
 exports.default = router;

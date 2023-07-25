@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Accesorio = void 0;
 var tslib_1 = require("tslib");
 var typeorm_1 = require("typeorm");
+var stock_1 = require("./stock");
 var Accesorio = (function () {
     function Accesorio() {
     }
@@ -53,6 +54,10 @@ var Accesorio = (function () {
         (0, typeorm_1.CreateDateColumn)(),
         tslib_1.__metadata("design:type", Date)
     ], Accesorio.prototype, "fecha_vencimiento", void 0);
+    tslib_1.__decorate([
+        (0, typeorm_1.OneToMany)(function () { return stock_1.Stock; }, function (stock) { return stock.tienda; }),
+        tslib_1.__metadata("design:type", stock_1.Stock)
+    ], Accesorio.prototype, "stocks", void 0);
     Accesorio = tslib_1.__decorate([
         (0, typeorm_1.Entity)({ name: 'accesorio' })
     ], Accesorio);

@@ -47,7 +47,7 @@ export class Accesorio {
     @CreateDateColumn()
     fecha_vencimiento!: Date;
     
-    
-    @OneToMany(() => Stock, (stock) => stock.tienda)
-    stocks!: Stock;
+      
+   @OneToMany(() => Stock, (stock) => stock.tienda)
+   stocks!: Stock;
 }  

@@ -5,10 +5,10 @@ import { StockRepository } from '../repository/stock.repository';
 
 export class StockTypeORM implements StockRepository {
 
-  async findStockByid(idproducto: number,idTienda: number): Promise<Stock | undefined> {
+  async findStockByid(accesorioId : number,tiendaId: number): Promise<Stock | undefined> {
     try {
       return await getRepository(Stock).findOne({
-        where: { idproducto, idTienda }
+        where: { accesorioId , tiendaId }
       });
     } catch (error:any) {
       throw new Error(error);
@@ -19,7 +19,7 @@ export class StockTypeORM implements StockRepository {
   async createStock(stock:Stock): 
   Promise<Stock> {
     try {
-      if (await this.findStockByid(stock.idproducto,stock.idTienda)) throw 'Stock ya registrado';
+      if (await this.findStockByid(stock.accesorioId,stock.tiendaId)) throw 'Stock ya registrado';
       return await getRepository(Stock).save(stock);
     } catch (error:any) {
       throw new Error(error);
@@ -31,8 +31,8 @@ export class StockTypeORM implements StockRepository {
   Promise<Stock> {
     try {
      
-      const  findStockByid = await this.findStockByid(stock.idproducto,stock.idTienda);
-      if ( findStockByid !== undefined && stock.idproducto !== findStockByid.idproducto && stock.idTienda !== findStockByid.idTienda){
+      const  findStockByid = await this.findStockByid(stock.accesorioId ,stock.tiendaId);
+      if ( findStockByid !== undefined && stock.accesorioId  !== findStockByid.accesorioId  && stock.tiendaId !== findStockByid.tiendaId){
         throw 'no registrado';
       }
       return await getRepository(Stock).save(stock);

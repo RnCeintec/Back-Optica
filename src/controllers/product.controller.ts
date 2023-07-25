@@ -5,7 +5,8 @@ import {Accesorio} from '../core/entities/accesorio'
 import {createProductInteractor, updateProductInteractor, deleteProductInteractor} from '../core/interactor/accesorio';
 import { encrypt } from '../utils';
 import { Hateoas } from '../utils';
-
+import { Stock } from '../core/entities/stock'
+import { Shop } from '../core/entities/shop'
 
 export const createProduct = async (req:Request,res:Response): Promise<Response> =>{
     try{
@@ -203,3 +204,150 @@ export const  searchProduct  = async (req:Request,res:Response): Promise<Respons
 
 
 }
+
+
+export const createStock = async (req: Request, res: Response): Promise<Response> => {
+  try {
+    const { idproducto,idTienda,canttienda} = req.body
+
+
+    const stock  = new Stock()
+    stock.accesorio = idproducto;
+    stock.tienda = idTienda;
+    stock.cant_tienda = canttienda;
+    const result= await getRepository(Stock).save(stock);
+
+    return res.json({result:result})
+
+
+  } catch (error: any) {
+    throw res.status(500).json({ message: error.message ?? error })
+
+  }
+
+
+}
+
+
+
+
+export const listaStock = async (req: Request, res: Response): Promise<Response> => {
+  try {
+    const {limit, offset, search,tienda } = req.query;
+    const hateoas = new Hateoas({
+      limit: limit ? `${limit}` : undefined,
+      offset: offset
+        // ? search && search !== ''
+        //   ? undefined
+          ? `${offset}`
+        : undefined,
+    });
+  const take = hateoas.take;
+  const skip = hateoas.skip;
+
+    let where:
+    | string
+    | ObjectLiteral
+    | FindConditions<Stock>
+    | FindConditions<Stock>[]
+    | undefined  = {};
+
+  
+    if (tienda != "") {
+
+      const tiendas = await getRepository(Shop).findOne({
+        where: { id: tienda, isActive: true },
+      });
+
+      if (!tiendas) {
+        return res.status(404).json({ message: "No existe la tienda" })
+      }
+
+      where = {
+        tienda: tiendas
+      }
+
+    }
+    if(tienda != ""){
+      var [result, count] = await getRepository(Stock).findAndCount({
+        take,
+        skip: skip * take,
+        where: [
+
+          { cant_tienda: Like(`%${search}%`),
+          tienda: Like (`${tienda}`),
+            ...where
+          }
+          // ,{
+          //   descripcion: Like(`%${search}%`),
+          //   ...where
+          // }
+      //    , {
+      //       codigo: Like(`%${search}%`),
+      //       tienda: Like (`${tienda}`),
+      //       ...where
+      //     },
+      
+         , {
+            accesorioId: Like(`%${search}%`),
+            tienda: Like (`${tienda}`),
+            ...where,
+      }
+
+
+      
+  
+        ],
+        relations: ['tienda','accesorio'],
+        order: { fecha_creacion: "DESC" }
+      });
+    }
+    else
+    {
+      var [result, count] = await getRepository(Stock).findAndCount({
+        take,
+        skip: skip * take,
+        where: [
+
+          { cant_tienda: Like(`%${search}%`),
+            ...where
+          }
+      //     ,
+      //     {
+      //       descripcion: Like(`%${search}%`),
+      //       ...where
+      //     },
+      //     {
+      //       codigo: Like(`%${search}%`),
+      //       ...where
+      //     },
+      
+      , {
+        accesorioId: Like(`%${search}%`),
+        ...where,
+  }
+      
+  
+        ],
+        relations: ['tienda','accesorio'],
+        order: { fecha_creacion: "DESC" }
+      });
+    }
+
+
+    
+
+    const [hateoasLink, pages] = hateoas.hateoas({ count });
+    return result
+      ? res.status(200).json({
+        result,
+        count,
+        link: hateoasLink,
+        pages: pages === 0 ? 1 : pages,
+      })
+      : res.status(404).json({ message: 'No existen productos' });
+  } catch (error: any) {
+    throw res.status(500).json({ message: error.message ?? error })
+  }
+}
+ 
