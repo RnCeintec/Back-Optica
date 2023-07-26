@@ -7,6 +7,7 @@ var _1 = require(".");
 var ingreso_monturas_1 = require("./ingreso_monturas");
 var shop_1 = require("./shop");
 var detalleinventario_1 = require("./detalleinventario");
+var historialmovimiento_1 = require("./historialmovimiento");
 var Monturas = (function () {
     function Monturas() {
     }
@@ -112,6 +113,10 @@ var Monturas = (function () {
         (0, typeorm_1.OneToMany)(function () { return detalleinventario_1.Detalleinventario; }, function (detalleinv) { return detalleinv.monturas; }),
         tslib_1.__metadata("design:type", detalleinventario_1.Detalleinventario)
     ], Monturas.prototype, "detalleinv", void 0);
+    tslib_1.__decorate([
+        (0, typeorm_1.OneToMany)(function () { return historialmovimiento_1.Historialmovimiento; }, function (mov) { return mov.monturas; }),
+        tslib_1.__metadata("design:type", historialmovimiento_1.Historialmovimiento)
+    ], Monturas.prototype, "historialmov", void 0);
     Monturas = tslib_1.__decorate([
         (0, typeorm_1.Entity)({ name: 'monturas' })
     ], Monturas);

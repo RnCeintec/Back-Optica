@@ -18,6 +18,7 @@ import proveedorRoute from "./proveedor.route";
 import laboratorioRoute from "./laboratorio.route";
 import diotriasRoute from "./diotrias.route";
 import detalleInventarioRoute from "./detalleInventario.route";
+import HistorialMovimientoRoute from "./historialmovimiento.route";
 
 export default ({ app, version }: { app: Express; version: string }) => {
   app.use(version, userRoute);
@@ -37,7 +38,6 @@ export default ({ app, version }: { app: Express; version: string }) => {
   app.use(version, diotriasRoute);
   app.use(version, colorRoute);
   app.use(version,detalleInventarioRoute);
-
-
+  app.use(version,HistorialMovimientoRoute);
 
 };

@@ -18,6 +18,7 @@ var proveedor_route_1 = tslib_1.__importDefault(require("./proveedor.route"));
 var laboratorio_route_1 = tslib_1.__importDefault(require("./laboratorio.route"));
 var diotrias_route_1 = tslib_1.__importDefault(require("./diotrias.route"));
 var detalleInventario_route_1 = tslib_1.__importDefault(require("./detalleInventario.route"));
+var historialmovimiento_route_1 = tslib_1.__importDefault(require("./historialmovimiento.route"));
 exports.default = (function (_a) {
     var app = _a.app, version = _a.version;
     app.use(version, user_router_1.default);
@@ -37,4 +38,5 @@ exports.default = (function (_a) {
     app.use(version, diotrias_route_1.default);
     app.use(version, color_routes_1.default);
     app.use(version, detalleInventario_route_1.default);
+    app.use(version, historialmovimiento_route_1.default);
 });

@@ -14,3 +14,4 @@ export { Diotrias } from "./dioptrias";
 export { Historialinventario } from "./historialinventario";
 export { Detalleinventario } from "./detalleinventario";
 export { Stock } from "./stock"
+export { Historialmovimiento } from "./historialmovimiento"

@@ -12,6 +12,7 @@ import { Monturas } from "./monturas";
 import { Historialinventario } from "./historialinventario";
 import { Sales } from "./sales";
 import { Stock } from "./stock";
+import { Historialmovimiento } from "./historialmovimiento";
 
 @Entity({ name: "local" })
 export class Shop {
@@ -71,6 +72,9 @@ export class Shop {
 
   @OneToMany(() => Stock, (stock) => stock.tienda)
   stocks!: Stock;
+
+  @OneToMany(() => Historialmovimiento, (mov) => mov.tienda)
+  historialmov!: Historialmovimiento;
 
 
 

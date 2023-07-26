@@ -8,6 +8,7 @@ var monturas_1 = require("./monturas");
 var historialinventario_1 = require("./historialinventario");
 var sales_1 = require("./sales");
 var stock_1 = require("./stock");
+var historialmovimiento_1 = require("./historialmovimiento");
 var Shop = (function () {
     function Shop() {
     }
@@ -85,6 +86,10 @@ var Shop = (function () {
         (0, typeorm_1.OneToMany)(function () { return stock_1.Stock; }, function (stock) { return stock.tienda; }),
         tslib_1.__metadata("design:type", stock_1.Stock)
     ], Shop.prototype, "stocks", void 0);
+    tslib_1.__decorate([
+        (0, typeorm_1.OneToMany)(function () { return historialmovimiento_1.Historialmovimiento; }, function (mov) { return mov.tienda; }),
+        tslib_1.__metadata("design:type", historialmovimiento_1.Historialmovimiento)
+    ], Shop.prototype, "historialmov", void 0);
     Shop = tslib_1.__decorate([
         (0, typeorm_1.Entity)({ name: "local" })
     ], Shop);
