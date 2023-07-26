@@ -234,16 +234,16 @@ export const createStock = async (req: Request, res: Response): Promise<Response
 export const listaStock = async (req: Request, res: Response): Promise<Response> => {
   try {
     const {limit, offset, search,tienda } = req.query;
-    const hateoas = new Hateoas({
-      limit: limit ? `${limit}` : undefined,
-      offset: offset
-        // ? search && search !== ''
-        //   ? undefined
-          ? `${offset}`
-        : undefined,
-    });
-  const take = hateoas.take;
-  const skip = hateoas.skip;
+  //   const hateoas = new Hateoas({
+  //     limit: limit ? `${limit}` : undefined,
+  //     offset: offset
+  //       // ? search && search !== ''
+  //       //   ? undefined
+  //         ? `${offset}`
+  //       : undefined,
+  //   });
+  // const take = hateoas.take;
+  // const skip = hateoas.skip;
 
     let where:
     | string
@@ -270,8 +270,8 @@ export const listaStock = async (req: Request, res: Response): Promise<Response>
     }
     if(tienda != ""){
       var [result, count] = await getRepository(Stock).findAndCount({
-        take,
-        skip: skip * take,
+        // take,
+        // skip: skip * take,
         where: [
 
           { cant_tienda: Like(`%${search}%`),
@@ -305,8 +305,8 @@ export const listaStock = async (req: Request, res: Response): Promise<Response>
     else
     {
       var [result, count] = await getRepository(Stock).findAndCount({
-        take,
-        skip: skip * take,
+        // take,
+        // skip: skip * take,
         where: [
 
           { cant_tienda: Like(`%${search}%`),
@@ -337,13 +337,13 @@ export const listaStock = async (req: Request, res: Response): Promise<Response>
 
     
 
-    const [hateoasLink, pages] = hateoas.hateoas({ count });
+    // const [hateoasLink, pages] = hateoas.hateoas({ count });
     return result
       ? res.status(200).json({
         result,
         count,
-        link: hateoasLink,
-        pages: pages === 0 ? 1 : pages,
+        // link: hateoasLink,
+        pages: 1,   //pages === 0 ? 1 : pages,
       })
       : res.status(404).json({ message: 'No existen productos' });
   } catch (error: any) {

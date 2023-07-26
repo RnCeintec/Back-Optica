@@ -232,40 +232,30 @@ var createStock = function (req, res) { return tslib_1.__awaiter(void 0, void 0,
 }); };
 exports.createStock = createStock;
 var listaStock = function (req, res) { return tslib_1.__awaiter(void 0, void 0, void 0, function () {
-    var _a, limit, offset, search, tienda, hateoas, take, skip, where, tiendas, _b, result, count, _c, result, count, _d, hateoasLink, pages, error_8;
-    var _e;
-    return tslib_1.__generator(this, function (_f) {
-        switch (_f.label) {
+    var _a, limit, offset, search, tienda, where, tiendas, _b, result, count, _c, result, count, error_8;
+    var _d;
+    return tslib_1.__generator(this, function (_e) {
+        switch (_e.label) {
             case 0:
-                _f.trys.push([0, 7, , 8]);
+                _e.trys.push([0, 7, , 8]);
                 _a = req.query, limit = _a.limit, offset = _a.offset, search = _a.search, tienda = _a.tienda;
-                hateoas = new utils_1.Hateoas({
-                    limit: limit ? "".concat(limit) : undefined,
-                    offset: offset
-                        ? "".concat(offset)
-                        : undefined,
-                });
-                take = hateoas.take;
-                skip = hateoas.skip;
                 where = {};
                 if (!(tienda != "")) return [3, 2];
                 return [4, (0, typeorm_1.getRepository)(shop_1.Shop).findOne({
                         where: { id: tienda, isActive: true },
                     })];
             case 1:
-                tiendas = _f.sent();
+                tiendas = _e.sent();
                 if (!tiendas) {
                     return [2, res.status(404).json({ message: "No existe la tienda" })];
                 }
                 where = {
                     tienda: tiendas
                 };
-                _f.label = 2;
+                _e.label = 2;
             case 2:
                 if (!(tienda != "")) return [3, 4];
                 return [4, (0, typeorm_1.getRepository)(stock_1.Stock).findAndCount({
-                        take: take,
-                        skip: skip * take,
                         where: [
                             tslib_1.__assign({ cant_tienda: (0, typeorm_1.Like)("%".concat(search, "%")), tienda: (0, typeorm_1.Like)("".concat(tienda)) }, where),
                             tslib_1.__assign({ accesorioId: (0, typeorm_1.Like)("%".concat(search, "%")), tienda: (0, typeorm_1.Like)("".concat(tienda)) }, where)
@@ -274,11 +264,9 @@ var listaStock = function (req, res) { return tslib_1.__awaiter(void 0, void 0, 
                         order: { fecha_creacion: "DESC" }
                     })];
             case 3:
-                _b = _f.sent(), result = _b[0], count = _b[1];
+                _b = _e.sent(), result = _b[0], count = _b[1];
                 return [3, 6];
             case 4: return [4, (0, typeorm_1.getRepository)(stock_1.Stock).findAndCount({
-                    take: take,
-                    skip: skip * take,
                     where: [
                         tslib_1.__assign({ cant_tienda: (0, typeorm_1.Like)("%".concat(search, "%")) }, where),
                         tslib_1.__assign({ accesorioId: (0, typeorm_1.Like)("%".concat(search, "%")) }, where)
@@ -287,21 +275,18 @@ var listaStock = function (req, res) { return tslib_1.__awaiter(void 0, void 0, 
                     order: { fecha_creacion: "DESC" }
                 })];
             case 5:
-                _c = _f.sent(), result = _c[0], count = _c[1];
-                _f.label = 6;
-            case 6:
-                _d = hateoas.hateoas({ count: count }), hateoasLink = _d[0], pages = _d[1];
-                return [2, result
-                        ? res.status(200).json({
-                            result: result,
-                            count: count,
-                            link: hateoasLink,
-                            pages: pages === 0 ? 1 : pages,
-                        })
-                        : res.status(404).json({ message: 'No existen productos' })];
+                _c = _e.sent(), result = _c[0], count = _c[1];
+                _e.label = 6;
+            case 6: return [2, result
+                    ? res.status(200).json({
+                        result: result,
+                        count: count,
+                        pages: 1,
+                    })
+                    : res.status(404).json({ message: 'No existen productos' })];
             case 7:
-                error_8 = _f.sent();
-                throw res.status(500).json({ message: (_e = error_8.message) !== null && _e !== void 0 ? _e : error_8 });
+                error_8 = _e.sent();
+                throw res.status(500).json({ message: (_d = error_8.message) !== null && _d !== void 0 ? _d : error_8 });
             case 8: return [2];
         }
     });
