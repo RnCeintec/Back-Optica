@@ -376,12 +376,12 @@ var listMonturasSinComprar = function (req, res) { return tslib_1.__awaiter(void
 }); };
 exports.listMonturasSinComprar = listMonturasSinComprar;
 var listCompletaMonturas = function (req, res) { return tslib_1.__awaiter(void 0, void 0, void 0, function () {
-    var _a, limit, offset, tienda, ventasExiste, where, tiendas, _b, result, count, error_8;
-    var _c;
-    return tslib_1.__generator(this, function (_d) {
-        switch (_d.label) {
+    var _a, limit, offset, tienda, ventasExiste, where, tiendas, _b, result, count, _c, result, count, error_8;
+    var _d;
+    return tslib_1.__generator(this, function (_e) {
+        switch (_e.label) {
             case 0:
-                _d.trys.push([0, 4, , 5]);
+                _e.trys.push([0, 7, , 8]);
                 _a = req.query, limit = _a.limit, offset = _a.offset, tienda = _a.tienda, ventasExiste = _a.ventasExiste;
                 where = { isActive: true };
                 if (!tienda) return [3, 2];
@@ -389,7 +389,7 @@ var listCompletaMonturas = function (req, res) { return tslib_1.__awaiter(void 0
                         where: { id: tienda, isActive: true },
                     })];
             case 1:
-                tiendas = _d.sent();
+                tiendas = _e.sent();
                 if (!tiendas) {
                     return [2, res.status(404).json({ message: "No existe la tienda" })];
                 }
@@ -397,7 +397,7 @@ var listCompletaMonturas = function (req, res) { return tslib_1.__awaiter(void 0
                     tienda: tiendas,
                     isActive: true
                 };
-                _d.label = 2;
+                _e.label = 2;
             case 2: return [4, (0, typeorm_1.getRepository)(monturas_1.Monturas).findAndCount({
                     where: [
                         where
@@ -406,26 +406,36 @@ var listCompletaMonturas = function (req, res) { return tslib_1.__awaiter(void 0
                     order: { fecha_actualizacion: "DESC" }
                 })];
             case 3:
-                _b = _d.sent(), result = _b[0], count = _b[1];
-                if (ventasExiste) {
-                    if (ventasExiste === "0") {
-                        result = result.filter(function (montura) { return !montura.ventas; });
-                    }
-                    if (ventasExiste === "1") {
-                        result = result.filter(function (montura) { return montura.ventas; });
-                    }
+                _b = _e.sent(), result = _b[0], count = _b[1];
+                if (!ventasExiste) return [3, 4];
+                if (ventasExiste === "0") {
+                    result = result.filter(function (montura) { return !montura.ventas; });
                 }
-                return [2, result
-                        ? res.status(200).json({
-                            result: result,
-                            count: count,
-                            pages: 1,
-                        })
-                        : res.status(404).json({ message: 'No existen monturas' })];
-            case 4:
-                error_8 = _d.sent();
-                throw res.status(500).json({ message: (_c = error_8.message) !== null && _c !== void 0 ? _c : error_8 });
-            case 5: return [2];
+                if (ventasExiste === "1") {
+                    result = result.filter(function (montura) { return montura.ventas; });
+                }
+                return [3, 6];
+            case 4: return [4, (0, typeorm_1.getRepository)(monturas_1.Monturas).findAndCount({
+                    where: [
+                        where
+                    ],
+                    relations: ['tienda'],
+                    order: { fecha_actualizacion: "DESC" }
+                })];
+            case 5:
+                _c = _e.sent(), result = _c[0], count = _c[1];
+                _e.label = 6;
+            case 6: return [2, result
+                    ? res.status(200).json({
+                        result: result,
+                        count: count,
+                        pages: 1,
+                    })
+                    : res.status(404).json({ message: 'No existen monturas' })];
+            case 7:
+                error_8 = _e.sent();
+                throw res.status(500).json({ message: (_d = error_8.message) !== null && _d !== void 0 ? _d : error_8 });
+            case 8: return [2];
         }
     });
 }); };

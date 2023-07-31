@@ -482,6 +482,19 @@ if(ventasExiste){
   
 
 }
+else{
+
+  var [result, count] = await getRepository(Monturas).findAndCount({
+    where: [
+      where
+    ],
+ 
+    relations: ['tienda'],
+    order: { fecha_actualizacion: "DESC" }
+  });
+
+
+}
     return result
       ? res.status(200).json({
         result,

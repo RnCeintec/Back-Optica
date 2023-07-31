@@ -10,6 +10,43 @@ import { createDetalleinventarioInteractor } from  '../core/interactor/inventari
 import { encrypt } from '../utils';
 import { Hateoas } from '../utils';
 
+
+
+export const createDetalleinventario = async (req: Request, res: Response): Promise<Response> => {
+  try {
+
+    const datosinventario = req.body
+    const resultall = []
+
+
+    for ( let datos of datosinventario)  {  
+
+      const detalle_inventario  = new Detalleinventario()
+      detalle_inventario.historialinventario = datos.historialId
+      detalle_inventario.monturasId = datos.monturasId
+  
+      const result = await createDetalleinventarioInteractor(detalle_inventario)
+      
+
+    resultall.push(result);
+ 
+      
+    }
+
+
+   return  res.json({result: resultall})
+
+
+
+    } catch (error: any) {
+    throw res.status(500).json({ message: error.message ?? error })
+
+  }
+ }
+
+
+
+
 export const createHistorialinventario = async (req: Request, res: Response): Promise<Response> => {
   try {
     const { total,totalfaltantes,totalverificados,tienda
@@ -36,24 +73,6 @@ export const createHistorialinventario = async (req: Request, res: Response): Pr
 }
 
 
-export const createDetalleinventario = async (req: Request, res: Response): Promise<Response> => {
-  try {
-    const {historialId,monturasId
-    } = req.body
-
-
-    const detalle_inventario  = new Detalleinventario()
-    detalle_inventario.historialinventario = historialId
-    detalle_inventario.monturasId = monturasId
-
-    const result = await createDetalleinventarioInteractor(detalle_inventario)
-
-       return res.json({result:result})
-    } catch (error: any) {
-    throw res.status(500).json({ message: error.message ?? error })
-
-  }
- }
 
 
 

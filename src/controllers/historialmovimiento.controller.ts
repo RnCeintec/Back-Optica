@@ -1,6 +1,6 @@
 import { Shop } from '../core/entities';
 import { Response, Request } from 'express'
-import {getRepository, ObjectLiteral, FindConditions, In, Like, Raw } from 'typeorm'
+import {getRepository, ObjectLiteral, FindConditions, In, Like, Raw, ObjectID } from 'typeorm'
 import { Monturas } from '../core/entities/monturas'
 import { Historialmovimiento } from '../core/entities/historialmovimiento'
 import { updateMonturasInteractor} from '../core/interactor/monturas';
@@ -44,6 +44,56 @@ export const createHistorialmovimientoTienda = async (req: Request, res: Respons
 
 
 }
+
+export const createmasivoHistorialmovimientoTienda = async (req: Request, res: Response): Promise<Response> => {
+  try {
+    const datosmovimiento = req.body
+     let resultall: Monturas[] = []
+     for ( let datos of datosmovimiento)  {  
+      
+
+      const montura = await getRepository(Monturas).findOne(datos.monturasId);
+      if (!montura) {
+        return res.status(404).json({ message: "Dede enviar id de la montura" })
+      }
+  
+
+    const Historial_movimiento = new Historialmovimiento()
+    Historial_movimiento.monturasId = datos.monturasId
+    Historial_movimiento.tiendaId = datos.tiendaId
+    Historial_movimiento.indicador = "TRASLADO"
+    Historial_movimiento.comentario = datos.comentario
+
+    const result0= await getRepository(Historialmovimiento).save(Historial_movimiento)
+
+    montura.tienda = datos.tiendaId ?? montura?.tienda
+
+
+    const result = await updateMonturasInteractor(montura)
+
+
+    resultall.push(result);
+ 
+      
+    }
+
+
+   return  res.json({result: resultall})
+
+  
+
+
+  } catch (error: any) {
+    throw res.status(500).json({ message: error.message ?? error })
+
+  }
+
+
+
+
+}
+
+
 
 
 
