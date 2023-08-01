@@ -10,7 +10,7 @@ import { Shop } from '../core/entities/shop'
 
 export const createProduct = async (req:Request,res:Response): Promise<Response> =>{
     try{
-        const {codigo,description,precio_compra,precio_sugerido,precio_minimo,categoria,stock} = req.body
+        const {codigo,description,precio_compra,precio_sugerido,precio_minimo,categoria,stock,idTienda} = req.body
         const product = new Accesorio()
         product.codigo = codigo 
         product.stock = stock 
@@ -22,6 +22,15 @@ export const createProduct = async (req:Request,res:Response): Promise<Response>
         // const result =  getRepository(Product).create(product);
 
         const result = await createProductInteractor(product)
+
+
+        const productTienda = new Stock()
+        productTienda.accesorioId = result.id;
+        productTienda.tiendaId = idTienda;
+        productTienda.cant_tienda = result.stock;
+        productTienda.smt = 0;
+        const result0 = await getRepository(Stock).save(productTienda);
+
         return res.json({result:result})
 
     }catch(error:any){

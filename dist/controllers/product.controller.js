@@ -9,13 +9,13 @@ var utils_1 = require("../utils");
 var stock_1 = require("../core/entities/stock");
 var shop_1 = require("../core/entities/shop");
 var createProduct = function (req, res) { return tslib_1.__awaiter(void 0, void 0, void 0, function () {
-    var _a, codigo, description, precio_compra, precio_sugerido, precio_minimo, categoria, stock, product_1, result, error_1;
+    var _a, codigo, description, precio_compra, precio_sugerido, precio_minimo, categoria, stock, idTienda, product_1, result, productTienda, result0, error_1;
     var _b;
     return tslib_1.__generator(this, function (_c) {
         switch (_c.label) {
             case 0:
-                _c.trys.push([0, 2, , 3]);
-                _a = req.body, codigo = _a.codigo, description = _a.description, precio_compra = _a.precio_compra, precio_sugerido = _a.precio_sugerido, precio_minimo = _a.precio_minimo, categoria = _a.categoria, stock = _a.stock;
+                _c.trys.push([0, 3, , 4]);
+                _a = req.body, codigo = _a.codigo, description = _a.description, precio_compra = _a.precio_compra, precio_sugerido = _a.precio_sugerido, precio_minimo = _a.precio_minimo, categoria = _a.categoria, stock = _a.stock, idTienda = _a.idTienda;
                 product_1 = new accesorio_1.Accesorio();
                 product_1.codigo = codigo;
                 product_1.stock = stock;
@@ -26,11 +26,19 @@ var createProduct = function (req, res) { return tslib_1.__awaiter(void 0, void 
                 return [4, (0, accesorio_2.createProductInteractor)(product_1)];
             case 1:
                 result = _c.sent();
-                return [2, res.json({ result: result })];
+                productTienda = new stock_1.Stock();
+                productTienda.accesorioId = result.id;
+                productTienda.tiendaId = idTienda;
+                productTienda.cant_tienda = result.stock;
+                productTienda.smt = 0;
+                return [4, (0, typeorm_1.getRepository)(stock_1.Stock).save(productTienda)];
             case 2:
+                result0 = _c.sent();
+                return [2, res.json({ result: result })];
+            case 3:
                 error_1 = _c.sent();
                 throw res.status(500).json({ message: (_b = error_1.message) !== null && _b !== void 0 ? _b : error_1 });
-            case 3: return [2];
+            case 4: return [2];
         }
     });
 }); };
