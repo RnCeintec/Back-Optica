@@ -15,3 +15,5 @@ export { Historialinventario } from "./historialinventario";
 export { Detalleinventario } from "./detalleinventario";
 export { Stock } from "./stock"
 export { Historialmovimiento } from "./historialmovimiento"
+export {Movimiento} from "./movimiento"
+export {DetalleMovimiento} from "./detallemovimiento"

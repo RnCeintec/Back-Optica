@@ -12,6 +12,7 @@ import { IngresoMonturas } from './ingreso_monturas';
 import { Shop } from './shop';
 import { Detalleinventario } from './detalleinventario';
 import { Historialmovimiento } from './historialmovimiento';
+import { DetalleMovimiento } from './detallemovimiento';
 
 @Entity({ name: 'monturas' })
 export class Monturas {
@@ -104,6 +105,12 @@ export class Monturas {
  
   @OneToMany(() => Historialmovimiento, (mov) => mov.monturas)
   historialmov!:Historialmovimiento;
+
+
+  
+  @OneToMany(() => DetalleMovimiento, (mov) => mov.monturas)
+  Detallelmov!:DetalleMovimiento;
+
 
 
 }
