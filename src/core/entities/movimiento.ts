@@ -5,8 +5,12 @@ import {
     CreateDateColumn,
     UpdateDateColumn,
     OneToMany,
-    ManyToOne
+    ManyToOne,
+    JoinColumn
   } from 'typeorm';
+
+  import { Shop } from './shop';
+  import { User } from '.'; 
 
   
   @Entity({ name: 'movimiento' })
@@ -19,10 +23,19 @@ import {
     fecha!: Date;
 
     @Column()
-    responsable!: string;
+    tiendaId!: number
+    
+    @ManyToOne(((type)=>Shop))
+    @JoinColumn()
+    tienda!:Shop;
 
     @Column()
-    recepcion!: string;
+    userId!: number;
+
+    @ManyToOne(((type)=>User))
+    @JoinColumn()
+    user!:User;
+
 
     @Column()
     estado!: string;

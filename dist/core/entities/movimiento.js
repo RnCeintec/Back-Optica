@@ -3,6 +3,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Movimiento = void 0;
 var tslib_1 = require("tslib");
 var typeorm_1 = require("typeorm");
+var shop_1 = require("./shop");
+var _1 = require(".");
 var Movimiento = (function () {
     function Movimiento() {
     }
@@ -17,12 +19,22 @@ var Movimiento = (function () {
     ], Movimiento.prototype, "fecha", void 0);
     tslib_1.__decorate([
         (0, typeorm_1.Column)(),
-        tslib_1.__metadata("design:type", String)
-    ], Movimiento.prototype, "responsable", void 0);
+        tslib_1.__metadata("design:type", Number)
+    ], Movimiento.prototype, "tiendaId", void 0);
+    tslib_1.__decorate([
+        (0, typeorm_1.ManyToOne)((function (type) { return shop_1.Shop; })),
+        (0, typeorm_1.JoinColumn)(),
+        tslib_1.__metadata("design:type", shop_1.Shop)
+    ], Movimiento.prototype, "tienda", void 0);
     tslib_1.__decorate([
         (0, typeorm_1.Column)(),
-        tslib_1.__metadata("design:type", String)
-    ], Movimiento.prototype, "recepcion", void 0);
+        tslib_1.__metadata("design:type", Number)
+    ], Movimiento.prototype, "userId", void 0);
+    tslib_1.__decorate([
+        (0, typeorm_1.ManyToOne)((function (type) { return _1.User; })),
+        (0, typeorm_1.JoinColumn)(),
+        tslib_1.__metadata("design:type", _1.User)
+    ], Movimiento.prototype, "user", void 0);
     tslib_1.__decorate([
         (0, typeorm_1.Column)(),
         tslib_1.__metadata("design:type", String)
