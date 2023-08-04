@@ -27,7 +27,7 @@ var Movimiento = (function () {
         tslib_1.__metadata("design:type", shop_1.Shop)
     ], Movimiento.prototype, "tienda", void 0);
     tslib_1.__decorate([
-        (0, typeorm_1.Column)(),
+        (0, typeorm_1.Column)({ nullable: true }),
         tslib_1.__metadata("design:type", Number)
     ], Movimiento.prototype, "userId", void 0);
     tslib_1.__decorate([
@@ -50,6 +50,10 @@ var Movimiento = (function () {
     tslib_1.__decorate([
         (0, typeorm_1.Column)({ nullable: true }),
         tslib_1.__metadata("design:type", String)
+    ], Movimiento.prototype, "documento", void 0);
+    tslib_1.__decorate([
+        (0, typeorm_1.Column)({ nullable: true }),
+        tslib_1.__metadata("design:type", String)
     ], Movimiento.prototype, "nrodocumento", void 0);
     tslib_1.__decorate([
         (0, typeorm_1.Column)({ nullable: true }),
@@ -59,6 +63,10 @@ var Movimiento = (function () {
         (0, typeorm_1.Column)({ default: 0 }),
         tslib_1.__metadata("design:type", Number)
     ], Movimiento.prototype, "idusuarioenvio", void 0);
+    tslib_1.__decorate([
+        (0, typeorm_1.OneToMany)(function () { return _1.DetalleMovimiento; }, function (mov) { return mov.movimiento; }),
+        tslib_1.__metadata("design:type", _1.DetalleMovimiento)
+    ], Movimiento.prototype, "detallesmovimiento", void 0);
     Movimiento = tslib_1.__decorate([
         (0, typeorm_1.Entity)({ name: 'movimiento' })
     ], Movimiento);

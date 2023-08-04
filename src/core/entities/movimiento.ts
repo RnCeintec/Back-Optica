@@ -10,7 +10,7 @@ import {
   } from 'typeorm';
 
   import { Shop } from './shop';
-  import { User } from '.'; 
+  import { DetalleMovimiento, User } from '.'; 
 
   
   @Entity({ name: 'movimiento' })
@@ -29,7 +29,7 @@ import {
     @JoinColumn()
     tienda!:Shop;
 
-    @Column()
+    @Column({nullable:true})
     userId!: number;
 
     @ManyToOne(((type)=>User))
@@ -46,6 +46,9 @@ import {
     @Column({ nullable: true })
     razonsocial!: string;
 
+    @Column({ nullable: true }) 
+    documento!: string;
+
     @Column({ nullable: true })
     nrodocumento!: string;
 
@@ -55,7 +58,9 @@ import {
     @Column({ default: 0 })
     idusuarioenvio!: number;
 
-
+    @OneToMany(() => DetalleMovimiento, (mov) => mov.movimiento)
+    detallesmovimiento!: DetalleMovimiento;
+  
   
   }
   

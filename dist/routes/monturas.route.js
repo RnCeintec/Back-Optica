@@ -11,4 +11,5 @@ router.get('/ultimaMonturas', monturas_controller_1.ultimaMontura);
 router.get('/monturasventa', monturas_controller_1.listMonturasSinComprar);
 router.get('/MonturasCompleta', monturas_controller_1.listCompletaMonturas);
 router.get('/monturas/:id', monturas_controller_1.searchMontura);
+router.get('/monturasid/:id', monturas_controller_1.searchMonturaid);
 exports.default = router;

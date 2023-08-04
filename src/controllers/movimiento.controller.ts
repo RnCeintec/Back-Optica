@@ -43,7 +43,8 @@ import { Hateoas } from '../utils';
         }
   
         where = {
-          tienda: tiendas
+          tienda: tiendas,
+             isActive: true
         }
   
       }
@@ -95,7 +96,71 @@ import { Hateoas } from '../utils';
 
 
 }
+
+
+
+export const createmovimiento = async (req: Request, res: Response): Promise<Response> => {
+  try {
+    
+
+    const {monturasmovimiento,ruc,razonsocial,documento,nrodocumento,fechafacturacion,responsable} = req.body
+    const resultall = []
+
+    const movimiento = new Movimiento();
+    movimiento.estado = "pendiente"
+    movimiento.ruc = ruc
+    movimiento.razonsocial = razonsocial
+    movimiento.nrodocumento = nrodocumento
+    movimiento.documento = documento
+    movimiento.fechafacturacion = fechafacturacion
+    movimiento.tiendaId = responsable
+    // movimiento.userId = recepcion
+
+    const result0 = await getRepository(Movimiento).save(movimiento);
+
+   for ( let datos of monturasmovimiento)  {  
+
+      const detalle_movimiento  = new DetalleMovimiento()
+      detalle_movimiento.movimientoId = result0.id
+      detalle_movimiento.monturasId = datos.monturasId
+      detalle_movimiento.tiendaId =  result0.tiendaId
  
+  
+    const result = await getRepository(DetalleMovimiento).save(detalle_movimiento);
+      
+
+      resultall.push(result);
+ 
+      
+     }
+
+    console.log(resultall);
+
+   return  res.json({result: resultall})
+
+
+    } catch (error: any) {
+    throw res.status(500).json({ message: error.message ?? error })
+
+  }
+ }
+
+ export const searchMovimiento = async (req: Request, res: Response): Promise<Response> => {
+
+  try {
+    //PASAR LAS CATEGPRIAS RELACIONADAS
+    const movimiento = await getRepository(Movimiento).findOne({ where: { id: req.params.id }, relations: ['tienda', 'detallesmovimiento'] })
+    if (!movimiento ) {
+      return res.status(404).json({ message: "No existe movimiento" })
+    }
+    return res.status(200).json({ result: movimiento})
+  } catch (error: any) {
+    throw res.status(500).json({ message: error.message ?? error })
+
+  }
+
+
+}
 
 
 

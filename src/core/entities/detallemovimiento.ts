@@ -43,12 +43,9 @@ import {
     tienda!:Shop;
 
 
-    @Column()
+    @Column({nullable:true})
     userId!: number;
 
-    @ManyToOne(((type)=>User))
-    @JoinColumn()
-    user!:User;
 
   
   }

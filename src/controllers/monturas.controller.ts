@@ -331,6 +331,23 @@ export const searchMontura = async (req: Request, res: Response): Promise<Respon
 
 }
 
+export const searchMonturaid = async (req: Request, res: Response): Promise<Response> => {
+
+  try {
+    //PASAR LAS CATEGPRIAS RELACIONADAS
+    const montura = await getRepository(Monturas).findOne({ where: { idmontura: req.params.id } })
+    if (!montura) {
+      return res.status(404).json({ message: "No existe el montura" })
+    }
+    return res.status(200).json({ result: montura })
+  } catch (error: any) {
+    throw res.status(500).json({ message: error.message ?? error })
+
+  }
+
+
+}
+
 export const listMonturasSinComprar = async (req: Request, res: Response): Promise<Response> => {
   try {
     const { limit, offset, search, tienda,ventasExiste  } = req.query;

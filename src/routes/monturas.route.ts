@@ -1,5 +1,5 @@
 import {Router} from 'express'
-import {createMonturas,updateMonturas,listMonturas,ultimaMontura,searchMontura,deleteMontura,listMonturasSinComprar,listCompletaMonturas} from '../controllers/monturas.controller'
+import {createMonturas,updateMonturas,listMonturas,ultimaMontura,searchMontura,deleteMontura,listMonturasSinComprar,listCompletaMonturas,searchMonturaid } from '../controllers/monturas.controller'
 
 const router = Router()
 
@@ -12,6 +12,8 @@ router.get('/monturasventa',listMonturasSinComprar);
 router.get('/MonturasCompleta',listCompletaMonturas);
 
 router.get('/monturas/:id',searchMontura);
+router.get('/monturasid/:id',searchMonturaid);
+
 
 
 export default router;

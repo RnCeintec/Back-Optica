@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.listCompletaMonturas = exports.listMonturasSinComprar = exports.searchMontura = exports.ultimaMontura = exports.listMonturas = exports.deleteMontura = exports.updateMonturas = exports.createMonturas = void 0;
+exports.listCompletaMonturas = exports.listMonturasSinComprar = exports.searchMonturaid = exports.searchMontura = exports.ultimaMontura = exports.listMonturas = exports.deleteMontura = exports.updateMonturas = exports.createMonturas = void 0;
 var tslib_1 = require("tslib");
 var entities_1 = require("../core/entities");
 var typeorm_1 = require("typeorm");
@@ -303,8 +303,30 @@ var searchMontura = function (req, res) { return tslib_1.__awaiter(void 0, void 
     });
 }); };
 exports.searchMontura = searchMontura;
+var searchMonturaid = function (req, res) { return tslib_1.__awaiter(void 0, void 0, void 0, function () {
+    var montura, error_7;
+    var _a;
+    return tslib_1.__generator(this, function (_b) {
+        switch (_b.label) {
+            case 0:
+                _b.trys.push([0, 2, , 3]);
+                return [4, (0, typeorm_1.getRepository)(monturas_1.Monturas).findOne({ where: { idmontura: req.params.id } })];
+            case 1:
+                montura = _b.sent();
+                if (!montura) {
+                    return [2, res.status(404).json({ message: "No existe el montura" })];
+                }
+                return [2, res.status(200).json({ result: montura })];
+            case 2:
+                error_7 = _b.sent();
+                throw res.status(500).json({ message: (_a = error_7.message) !== null && _a !== void 0 ? _a : error_7 });
+            case 3: return [2];
+        }
+    });
+}); };
+exports.searchMonturaid = searchMonturaid;
 var listMonturasSinComprar = function (req, res) { return tslib_1.__awaiter(void 0, void 0, void 0, function () {
-    var _a, limit, offset, search, tienda, ventasExiste, hateoas, take, skip, where, tiendas, _b, result, count, _c, hateoasLink, pages, error_7;
+    var _a, limit, offset, search, tienda, ventasExiste, hateoas, take, skip, where, tiendas, _b, result, count, _c, hateoasLink, pages, error_8;
     var _d;
     return tslib_1.__generator(this, function (_e) {
         switch (_e.label) {
@@ -368,15 +390,15 @@ var listMonturasSinComprar = function (req, res) { return tslib_1.__awaiter(void
                         })
                         : res.status(404).json({ message: 'No existen monturas' })];
             case 4:
-                error_7 = _e.sent();
-                throw res.status(500).json({ message: (_d = error_7.message) !== null && _d !== void 0 ? _d : error_7 });
+                error_8 = _e.sent();
+                throw res.status(500).json({ message: (_d = error_8.message) !== null && _d !== void 0 ? _d : error_8 });
             case 5: return [2];
         }
     });
 }); };
 exports.listMonturasSinComprar = listMonturasSinComprar;
 var listCompletaMonturas = function (req, res) { return tslib_1.__awaiter(void 0, void 0, void 0, function () {
-    var _a, limit, offset, tienda, ventasExiste, where, tiendas, _b, result, count, _c, result, count, error_8;
+    var _a, limit, offset, tienda, ventasExiste, where, tiendas, _b, result, count, _c, result, count, error_9;
     var _d;
     return tslib_1.__generator(this, function (_e) {
         switch (_e.label) {
@@ -433,8 +455,8 @@ var listCompletaMonturas = function (req, res) { return tslib_1.__awaiter(void 0
                     })
                     : res.status(404).json({ message: 'No existen monturas' })];
             case 7:
-                error_8 = _e.sent();
-                throw res.status(500).json({ message: (_d = error_8.message) !== null && _d !== void 0 ? _d : error_8 });
+                error_9 = _e.sent();
+                throw res.status(500).json({ message: (_d = error_9.message) !== null && _d !== void 0 ? _d : error_9 });
             case 8: return [2];
         }
     });

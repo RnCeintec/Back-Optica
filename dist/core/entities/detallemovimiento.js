@@ -6,7 +6,6 @@ var typeorm_1 = require("typeorm");
 var monturas_1 = require("./monturas");
 var shop_1 = require("./shop");
 var movimiento_1 = require("./movimiento");
-var _1 = require(".");
 var DetalleMovimiento = (function () {
     function DetalleMovimiento() {
     }
@@ -42,14 +41,9 @@ var DetalleMovimiento = (function () {
         tslib_1.__metadata("design:type", shop_1.Shop)
     ], DetalleMovimiento.prototype, "tienda", void 0);
     tslib_1.__decorate([
-        (0, typeorm_1.Column)(),
+        (0, typeorm_1.Column)({ nullable: true }),
         tslib_1.__metadata("design:type", Number)
     ], DetalleMovimiento.prototype, "userId", void 0);
-    tslib_1.__decorate([
-        (0, typeorm_1.ManyToOne)((function (type) { return _1.User; })),
-        (0, typeorm_1.JoinColumn)(),
-        tslib_1.__metadata("design:type", _1.User)
-    ], DetalleMovimiento.prototype, "user", void 0);
     DetalleMovimiento = tslib_1.__decorate([
         (0, typeorm_1.Entity)({ name: 'detallemovimiento' })
     ], DetalleMovimiento);
