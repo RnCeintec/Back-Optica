@@ -35,7 +35,7 @@ import { Hateoas } from '../utils';
       if (tienda != "") {
 
         const tiendas = await getRepository(Shop).findOne({
-          where: { id: tienda, isActive: true },
+          where: { id: tienda},
         });
   
         if (!tiendas) {
@@ -43,8 +43,7 @@ import { Hateoas } from '../utils';
         }
   
         where = {
-          tienda: tiendas,
-             isActive: true
+          tienda: tiendas
         }
   
       }
@@ -73,7 +72,7 @@ import { Hateoas } from '../utils';
           where: [
             {...where}
           ],
-          relations: ['tienda',],
+          relations: ['tienda'],
           order: { fecha: "ASC" }
         }
         )

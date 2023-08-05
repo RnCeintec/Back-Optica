@@ -26,7 +26,7 @@ var listamovimiento = function (req, res) { return tslib_1.__awaiter(void 0, voi
                 where = {};
                 if (!(tienda != "")) return [3, 2];
                 return [4, (0, typeorm_1.getRepository)(entities_1.Shop).findOne({
-                        where: { id: tienda, isActive: true },
+                        where: { id: tienda },
                     })];
             case 1:
                 tiendas = _f.sent();
@@ -34,8 +34,7 @@ var listamovimiento = function (req, res) { return tslib_1.__awaiter(void 0, voi
                     return [2, res.status(404).json({ message: "No existe la tienda" })];
                 }
                 where = {
-                    tienda: tiendas,
-                    isActive: true
+                    tienda: tiendas
                 };
                 _f.label = 2;
             case 2:
@@ -58,7 +57,7 @@ var listamovimiento = function (req, res) { return tslib_1.__awaiter(void 0, voi
                     where: [
                         tslib_1.__assign({}, where)
                     ],
-                    relations: ['tienda',],
+                    relations: ['tienda'],
                     order: { fecha: "ASC" }
                 })];
             case 5:
