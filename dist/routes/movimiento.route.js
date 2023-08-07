@@ -6,4 +6,5 @@ var router = (0, express_1.Router)();
 router.get('/movimientomontura', movimiento_controller_1.listamovimiento);
 router.post('/movimientomontura', movimiento_controller_1.createmovimiento);
 router.get('/movimientomontura/:id', movimiento_controller_1.searchMovimiento);
+router.delete('/movimientomontura/:id', movimiento_controller_1.deleteMovimiento);
 exports.default = router;

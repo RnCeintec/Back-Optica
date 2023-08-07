@@ -1,4 +1,4 @@
-import { Shop } from '../core/entities';
+import { Historialmovimiento, Shop } from '../core/entities';
 import { Response, Request } from 'express'
 import {getRepository, ObjectLiteral, FindConditions, In, Like, Raw, ObjectID } from 'typeorm'
 import { Monturas } from '../core/entities/monturas'
@@ -6,8 +6,8 @@ import { Movimiento } from '../core/entities/movimiento'
 import { DetalleMovimiento } from '../core/entities/detallemovimiento'
 import { encrypt } from '../utils';
 import { Hateoas } from '../utils';
-
-
+import {  updateMonturasInteractor} from '../core/interactor/monturas';
+import { Historialinventario } from '../core/entities';
 
 
  export const listamovimiento = async (req: Request, res: Response): Promise<Response> => {
@@ -105,6 +105,8 @@ export const createmovimiento = async (req: Request, res: Response): Promise<Res
     const {monturasmovimiento,ruc,razonsocial,documento,nrodocumento,fechafacturacion,responsable} = req.body
     const resultall = []
 
+
+
     const movimiento = new Movimiento();
     movimiento.estado = "pendiente"
     movimiento.ruc = ruc
@@ -119,21 +121,51 @@ export const createmovimiento = async (req: Request, res: Response): Promise<Res
 
    for ( let datos of monturasmovimiento)  {  
 
+    const monturadata = await getRepository(Monturas).findOne(datos.monturasId);
+    if (!monturadata) {
+      return res.status(404).json({ message: "Dede enviar id de la montura" })
+    }
+
+
       const detalle_movimiento  = new DetalleMovimiento()
       detalle_movimiento.movimientoId = result0.id
       detalle_movimiento.monturasId = datos.monturasId
-      detalle_movimiento.tiendaId =  result0.tiendaId
+      detalle_movimiento.tiendaId =  responsable
  
   
     const result = await getRepository(DetalleMovimiento).save(detalle_movimiento);
       
 
+    monturadata.enmovimiento =  responsable.toString();
+
+    const result2 = await updateMonturasInteractor(monturadata);
+
+
+
+
+    const Historial_movimiento = new Historialmovimiento()
+    Historial_movimiento.monturasId = datos.monturasId
+    Historial_movimiento.tiendaId = responsable
+    Historial_movimiento.indicador = "ENVIO"
+    Historial_movimiento.comentario = ""
+
+    const resulth= await getRepository(Historialmovimiento).save(Historial_movimiento)
+
+
+
+
       resultall.push(result);
- 
-      
+
+
+
      }
 
-    console.log(resultall);
+     const montura = await getRepository(Monturas).findOne(req.params.id);
+    if (!montura) {
+      return res.status(404).json({ message: "Dede enviar id de la montura" })
+    }
+
+
 
    return  res.json({result: resultall})
 
@@ -164,3 +196,41 @@ export const createmovimiento = async (req: Request, res: Response): Promise<Res
 
 
 
+
+export const deleteMovimiento= async (req: Request, res: Response): Promise<Response> => {
+  try {
+    const movimiento = await getRepository(Movimiento).findOne({where:{id:req.params.id},relations: ['detallesmovimiento']})
+
+    if (!movimiento ) {
+      return res.status(404).json({ message: "No existe movimiento" })
+    }
+
+
+    // const monturas = await getRepository(Monturas).find({where:{enmovimiento:req.params.id.toString()}})
+    // for (let mons of monturas)
+    // {
+    //   mons.enmovimiento = ""
+    //   const result0 = await updateMonturasInteractor(mons)
+    //   console.log(result0);
+    // }
+
+ const detalle = await getRepository(DetalleMovimiento).find({where:{movimientoId:req.params.id}})
+    for (let det of detalle)
+    {
+      det.isActive = false;
+      const result2 = await getRepository(DetalleMovimiento).save(det);
+      console.log(result2);
+    }
+    
+   movimiento.estado = "eliminado"
+
+   const result = await getRepository(Movimiento).save(movimiento);
+    return res.json({result : result })
+
+  }
+
+catch (error: any) {
+  throw res.status(500).json({ message: error.message ?? error })
+
+}
+}

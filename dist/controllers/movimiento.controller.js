@@ -1,12 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.searchMovimiento = exports.createmovimiento = exports.listamovimiento = void 0;
+exports.deleteMovimiento = exports.searchMovimiento = exports.createmovimiento = exports.listamovimiento = void 0;
 var tslib_1 = require("tslib");
 var entities_1 = require("../core/entities");
 var typeorm_1 = require("typeorm");
+var monturas_1 = require("../core/entities/monturas");
 var movimiento_1 = require("../core/entities/movimiento");
 var detallemovimiento_1 = require("../core/entities/detallemovimiento");
 var utils_1 = require("../utils");
+var monturas_2 = require("../core/interactor/monturas");
 var listamovimiento = function (req, res) { return tslib_1.__awaiter(void 0, void 0, void 0, function () {
     var _a, limit, offset, tienda, hateoas, take, skip, where, tiendas, _b, result, count, _c, result, count, _d, hateoasLink, pages, error_1;
     var _e;
@@ -82,12 +84,12 @@ var listamovimiento = function (req, res) { return tslib_1.__awaiter(void 0, voi
 }); };
 exports.listamovimiento = listamovimiento;
 var createmovimiento = function (req, res) { return tslib_1.__awaiter(void 0, void 0, void 0, function () {
-    var _a, monturasmovimiento, ruc, razonsocial, documento, nrodocumento, fechafacturacion, responsable, resultall, movimiento, result0, _i, monturasmovimiento_1, datos, detalle_movimiento, result, error_2;
+    var _a, monturasmovimiento, ruc, razonsocial, documento, nrodocumento, fechafacturacion, responsable, resultall, movimiento, result0, _i, monturasmovimiento_1, datos, monturadata, detalle_movimiento, result, result2, Historial_movimiento, resulth, montura, error_2;
     var _b;
     return tslib_1.__generator(this, function (_c) {
         switch (_c.label) {
             case 0:
-                _c.trys.push([0, 6, , 7]);
+                _c.trys.push([0, 10, , 11]);
                 _a = req.body, monturasmovimiento = _a.monturasmovimiento, ruc = _a.ruc, razonsocial = _a.razonsocial, documento = _a.documento, nrodocumento = _a.nrodocumento, fechafacturacion = _a.fechafacturacion, responsable = _a.responsable;
                 resultall = [];
                 movimiento = new movimiento_1.Movimiento();
@@ -104,27 +106,49 @@ var createmovimiento = function (req, res) { return tslib_1.__awaiter(void 0, vo
                 _i = 0, monturasmovimiento_1 = monturasmovimiento;
                 _c.label = 2;
             case 2:
-                if (!(_i < monturasmovimiento_1.length)) return [3, 5];
+                if (!(_i < monturasmovimiento_1.length)) return [3, 8];
                 datos = monturasmovimiento_1[_i];
+                return [4, (0, typeorm_1.getRepository)(monturas_1.Monturas).findOne(datos.monturasId)];
+            case 3:
+                monturadata = _c.sent();
+                if (!monturadata) {
+                    return [2, res.status(404).json({ message: "Dede enviar id de la montura" })];
+                }
                 detalle_movimiento = new detallemovimiento_1.DetalleMovimiento();
                 detalle_movimiento.movimientoId = result0.id;
                 detalle_movimiento.monturasId = datos.monturasId;
-                detalle_movimiento.tiendaId = result0.tiendaId;
+                detalle_movimiento.tiendaId = responsable;
                 return [4, (0, typeorm_1.getRepository)(detallemovimiento_1.DetalleMovimiento).save(detalle_movimiento)];
-            case 3:
-                result = _c.sent();
-                resultall.push(result);
-                _c.label = 4;
             case 4:
+                result = _c.sent();
+                monturadata.enmovimiento = responsable.toString();
+                return [4, (0, monturas_2.updateMonturasInteractor)(monturadata)];
+            case 5:
+                result2 = _c.sent();
+                Historial_movimiento = new entities_1.Historialmovimiento();
+                Historial_movimiento.monturasId = datos.monturasId;
+                Historial_movimiento.tiendaId = responsable;
+                Historial_movimiento.indicador = "ENVIO";
+                Historial_movimiento.comentario = "";
+                return [4, (0, typeorm_1.getRepository)(entities_1.Historialmovimiento).save(Historial_movimiento)];
+            case 6:
+                resulth = _c.sent();
+                resultall.push(result);
+                _c.label = 7;
+            case 7:
                 _i++;
                 return [3, 2];
-            case 5:
-                console.log(resultall);
+            case 8: return [4, (0, typeorm_1.getRepository)(monturas_1.Monturas).findOne(req.params.id)];
+            case 9:
+                montura = _c.sent();
+                if (!montura) {
+                    return [2, res.status(404).json({ message: "Dede enviar id de la montura" })];
+                }
                 return [2, res.json({ result: resultall })];
-            case 6:
+            case 10:
                 error_2 = _c.sent();
                 throw res.status(500).json({ message: (_b = error_2.message) !== null && _b !== void 0 ? _b : error_2 });
-            case 7: return [2];
+            case 11: return [2];
         }
     });
 }); };
@@ -151,3 +175,47 @@ var searchMovimiento = function (req, res) { return tslib_1.__awaiter(void 0, vo
     });
 }); };
 exports.searchMovimiento = searchMovimiento;
+var deleteMovimiento = function (req, res) { return tslib_1.__awaiter(void 0, void 0, void 0, function () {
+    var movimiento, detalle, _i, detalle_1, det, result2, result, error_4;
+    var _a;
+    return tslib_1.__generator(this, function (_b) {
+        switch (_b.label) {
+            case 0:
+                _b.trys.push([0, 8, , 9]);
+                return [4, (0, typeorm_1.getRepository)(movimiento_1.Movimiento).findOne({ where: { id: req.params.id }, relations: ['detallesmovimiento'] })];
+            case 1:
+                movimiento = _b.sent();
+                if (!movimiento) {
+                    return [2, res.status(404).json({ message: "No existe movimiento" })];
+                }
+                return [4, (0, typeorm_1.getRepository)(detallemovimiento_1.DetalleMovimiento).find({ where: { movimientoId: req.params.id } })];
+            case 2:
+                detalle = _b.sent();
+                _i = 0, detalle_1 = detalle;
+                _b.label = 3;
+            case 3:
+                if (!(_i < detalle_1.length)) return [3, 6];
+                det = detalle_1[_i];
+                det.isActive = false;
+                return [4, (0, typeorm_1.getRepository)(detallemovimiento_1.DetalleMovimiento).save(det)];
+            case 4:
+                result2 = _b.sent();
+                console.log(result2);
+                _b.label = 5;
+            case 5:
+                _i++;
+                return [3, 3];
+            case 6:
+                movimiento.estado = "eliminado";
+                return [4, (0, typeorm_1.getRepository)(movimiento_1.Movimiento).save(movimiento)];
+            case 7:
+                result = _b.sent();
+                return [2, res.json({ result: result })];
+            case 8:
+                error_4 = _b.sent();
+                throw res.status(500).json({ message: (_a = error_4.message) !== null && _a !== void 0 ? _a : error_4 });
+            case 9: return [2];
+        }
+    });
+}); };
+exports.deleteMovimiento = deleteMovimiento;

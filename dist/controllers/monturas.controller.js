@@ -310,7 +310,7 @@ var searchMonturaid = function (req, res) { return tslib_1.__awaiter(void 0, voi
         switch (_b.label) {
             case 0:
                 _b.trys.push([0, 2, , 3]);
-                return [4, (0, typeorm_1.getRepository)(monturas_1.Monturas).findOne({ where: { idmontura: req.params.id } })];
+                return [4, (0, typeorm_1.getRepository)(monturas_1.Monturas).findOne({ where: { idmontura: req.params.id }, relations: ['ventas', 'tienda'] })];
             case 1:
                 montura = _b.sent();
                 if (!montura) {

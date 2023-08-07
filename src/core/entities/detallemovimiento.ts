@@ -43,8 +43,8 @@ import {
     tienda!:Shop;
 
 
-    @Column({nullable:true})
-    userId!: number;
+    @Column({default: true })
+    isActive!: boolean;
 
 
   
