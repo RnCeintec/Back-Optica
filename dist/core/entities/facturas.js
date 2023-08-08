@@ -40,7 +40,7 @@ var Facturas = (function () {
         tslib_1.__metadata("design:type", String)
     ], Facturas.prototype, "respuesta", void 0);
     tslib_1.__decorate([
-        (0, typeorm_1.Column)(),
+        (0, typeorm_1.Column)({ nullable: true }),
         tslib_1.__metadata("design:type", String)
     ], Facturas.prototype, "motivo", void 0);
     tslib_1.__decorate([
@@ -53,11 +53,11 @@ var Facturas = (function () {
         tslib_1.__metadata("design:type", Number)
     ], Facturas.prototype, "is_nota", void 0);
     tslib_1.__decorate([
-        (0, typeorm_1.Column)(),
+        (0, typeorm_1.Column)({ nullable: true }),
         tslib_1.__metadata("design:type", String)
     ], Facturas.prototype, "codigo_anulado", void 0);
     tslib_1.__decorate([
-        (0, typeorm_1.Column)(),
+        (0, typeorm_1.Column)({ nullable: true }),
         tslib_1.__metadata("design:type", String)
     ], Facturas.prototype, "observaciones", void 0);
     tslib_1.__decorate([

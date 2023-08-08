@@ -40,7 +40,7 @@ var Proveedor = (function () {
         tslib_1.__metadata("design:type", String)
     ], Proveedor.prototype, "celular", void 0);
     tslib_1.__decorate([
-        (0, typeorm_1.Column)(),
+        (0, typeorm_1.Column)({ nullable: true }),
         tslib_1.__metadata("design:type", String)
     ], Proveedor.prototype, "comentario", void 0);
     tslib_1.__decorate([

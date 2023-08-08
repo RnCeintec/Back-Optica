@@ -205,22 +205,27 @@ export const deleteMovimiento= async (req: Request, res: Response): Promise<Resp
       return res.status(404).json({ message: "No existe movimiento" })
     }
 
-
-    // const monturas = await getRepository(Monturas).find({where:{enmovimiento:req.params.id.toString()}})
-    // for (let mons of monturas)
-    // {
-    //   mons.enmovimiento = ""
-    //   const result0 = await updateMonturasInteractor(mons)
-    //   console.log(result0);
-    // }
-
- const detalle = await getRepository(DetalleMovimiento).find({where:{movimientoId:req.params.id}})
-    for (let det of detalle)
-    {
-      det.isActive = false;
-      const result2 = await getRepository(DetalleMovimiento).save(det);
-      console.log(result2);
+   for ( const detalle of movimiento.detallesmovimiento)
+   {
+    const montura = await getRepository(Monturas).findOne({where:{id:detalle.monturasId}})
+    if (!montura ) {
+      return res.status(404).json({ message: "No existe montura" })
     }
+    montura.enmovimiento = ""
+    const result0 = await updateMonturasInteractor(montura)
+
+    detalle.isActive = false;
+    const result2 = await getRepository(DetalleMovimiento).save(detalle);
+
+    const Historial_movimiento = new Historialmovimiento()
+    Historial_movimiento.monturasId = detalle.monturasId
+    Historial_movimiento.indicador = "CANCELADO" 
+    Historial_movimiento.tiendaId = detalle.tiendaId
+    Historial_movimiento.comentario = ""
+    const result3 = await getRepository(Historialmovimiento).save(Historial_movimiento)
+
+   }
+
     
    movimiento.estado = "eliminado"
 

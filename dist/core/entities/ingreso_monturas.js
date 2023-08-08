@@ -17,11 +17,11 @@ var IngresoMonturas = (function () {
         tslib_1.__metadata("design:type", Boolean)
     ], IngresoMonturas.prototype, "isActive", void 0);
     tslib_1.__decorate([
-        (0, typeorm_1.Column)(),
+        (0, typeorm_1.Column)({ nullable: true }),
         tslib_1.__metadata("design:type", Date)
     ], IngresoMonturas.prototype, "fecha", void 0);
     tslib_1.__decorate([
-        (0, typeorm_1.Column)(),
+        (0, typeorm_1.Column)({ nullable: true }),
         tslib_1.__metadata("design:type", String)
     ], IngresoMonturas.prototype, "hora", void 0);
     tslib_1.__decorate([
@@ -33,7 +33,7 @@ var IngresoMonturas = (function () {
         tslib_1.__metadata("design:type", String)
     ], IngresoMonturas.prototype, "documento", void 0);
     tslib_1.__decorate([
-        (0, typeorm_1.Column)(),
+        (0, typeorm_1.Column)({ nullable: true }),
         tslib_1.__metadata("design:type", String)
     ], IngresoMonturas.prototype, "numero_documento", void 0);
     tslib_1.__decorate([

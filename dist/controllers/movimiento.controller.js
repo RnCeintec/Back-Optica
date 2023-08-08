@@ -176,45 +176,59 @@ var searchMovimiento = function (req, res) { return tslib_1.__awaiter(void 0, vo
 }); };
 exports.searchMovimiento = searchMovimiento;
 var deleteMovimiento = function (req, res) { return tslib_1.__awaiter(void 0, void 0, void 0, function () {
-    var movimiento, detalle, _i, detalle_1, det, result2, result, error_4;
-    var _a;
-    return tslib_1.__generator(this, function (_b) {
-        switch (_b.label) {
+    var movimiento, _i, _a, detalle, montura, result0, result2, Historial_movimiento, result3, result, error_4;
+    var _b;
+    return tslib_1.__generator(this, function (_c) {
+        switch (_c.label) {
             case 0:
-                _b.trys.push([0, 8, , 9]);
+                _c.trys.push([0, 10, , 11]);
                 return [4, (0, typeorm_1.getRepository)(movimiento_1.Movimiento).findOne({ where: { id: req.params.id }, relations: ['detallesmovimiento'] })];
             case 1:
-                movimiento = _b.sent();
+                movimiento = _c.sent();
                 if (!movimiento) {
                     return [2, res.status(404).json({ message: "No existe movimiento" })];
                 }
-                return [4, (0, typeorm_1.getRepository)(detallemovimiento_1.DetalleMovimiento).find({ where: { movimientoId: req.params.id } })];
+                _i = 0, _a = movimiento.detallesmovimiento;
+                _c.label = 2;
             case 2:
-                detalle = _b.sent();
-                _i = 0, detalle_1 = detalle;
-                _b.label = 3;
+                if (!(_i < _a.length)) return [3, 8];
+                detalle = _a[_i];
+                return [4, (0, typeorm_1.getRepository)(monturas_1.Monturas).findOne({ where: { id: detalle.monturasId } })];
             case 3:
-                if (!(_i < detalle_1.length)) return [3, 6];
-                det = detalle_1[_i];
-                det.isActive = false;
-                return [4, (0, typeorm_1.getRepository)(detallemovimiento_1.DetalleMovimiento).save(det)];
+                montura = _c.sent();
+                if (!montura) {
+                    return [2, res.status(404).json({ message: "No existe montura" })];
+                }
+                montura.enmovimiento = "";
+                return [4, (0, monturas_2.updateMonturasInteractor)(montura)];
             case 4:
-                result2 = _b.sent();
-                console.log(result2);
-                _b.label = 5;
+                result0 = _c.sent();
+                detalle.isActive = false;
+                return [4, (0, typeorm_1.getRepository)(detallemovimiento_1.DetalleMovimiento).save(detalle)];
             case 5:
-                _i++;
-                return [3, 3];
+                result2 = _c.sent();
+                Historial_movimiento = new entities_1.Historialmovimiento();
+                Historial_movimiento.monturasId = detalle.monturasId;
+                Historial_movimiento.indicador = "CANCELADO";
+                Historial_movimiento.tiendaId = detalle.tiendaId;
+                Historial_movimiento.comentario = "";
+                return [4, (0, typeorm_1.getRepository)(entities_1.Historialmovimiento).save(Historial_movimiento)];
             case 6:
+                result3 = _c.sent();
+                _c.label = 7;
+            case 7:
+                _i++;
+                return [3, 2];
+            case 8:
                 movimiento.estado = "eliminado";
                 return [4, (0, typeorm_1.getRepository)(movimiento_1.Movimiento).save(movimiento)];
-            case 7:
-                result = _b.sent();
+            case 9:
+                result = _c.sent();
                 return [2, res.json({ result: result })];
-            case 8:
-                error_4 = _b.sent();
-                throw res.status(500).json({ message: (_a = error_4.message) !== null && _a !== void 0 ? _a : error_4 });
-            case 9: return [2];
+            case 10:
+                error_4 = _c.sent();
+                throw res.status(500).json({ message: (_b = error_4.message) !== null && _b !== void 0 ? _b : error_4 });
+            case 11: return [2];
         }
     });
 }); };

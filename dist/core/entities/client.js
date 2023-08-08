@@ -47,7 +47,7 @@ var Client = (function () {
         tslib_1.__metadata("design:type", Number)
     ], Client.prototype, "telefono", void 0);
     tslib_1.__decorate([
-        (0, typeorm_1.Column)(),
+        (0, typeorm_1.Column)({ nullable: true }),
         tslib_1.__metadata("design:type", String)
     ], Client.prototype, "observacion", void 0);
     tslib_1.__decorate([

@@ -36,7 +36,7 @@ export class Facturas {
   @Column()
   respuesta!: string;
 
-  @Column()
+  @Column({nullable:true})
   motivo!: string;
 
   @Column()
@@ -46,10 +46,10 @@ export class Facturas {
   @Column()
   is_nota!: number;
 
-  @Column()
+  @Column({nullable:true})
   codigo_anulado!: string;
 
-  @Column()
+  @Column({nullable:true})
   observaciones!: string;
 
   @Column()

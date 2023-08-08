@@ -37,7 +37,7 @@ export class Shop {
   @Column()
   num_documento!: string;
 
-  @Column()
+  @Column({nullable:true})
   eslogan!: string;
 
   @Column()
@@ -57,7 +57,7 @@ export class Shop {
   @Column()
   rz_social!: string;
 
-  @Column()
+  @Column({nullable:true})
   codDomicilioFiscal!: string;
 
   @OneToMany(() => Monturas, (monturas) => monturas.tienda)

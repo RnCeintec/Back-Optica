@@ -20,10 +20,10 @@ export class IngresoMonturas {
   @Column({ default: true })
   isActive!: boolean;
 
-  @Column()
+  @Column({nullable:true})
   fecha!: Date
 
-  @Column()
+  @Column({nullable:true})
   hora!: string
 
   @ManyToOne(() => Proveedor, (proveedor) => proveedor.ingreso)
@@ -32,7 +32,7 @@ export class IngresoMonturas {
   @Column()
   documento!: string
 
-  @Column()
+  @Column({nullable:true})
   numero_documento!: string
 
 

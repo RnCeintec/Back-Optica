@@ -31,31 +31,31 @@ export class Monturas {
   @Column()
   modelo!: string;
 
-  @Column()
+  @Column({nullable:true})
   colorDescripcion!: string;
 
   @Column()
   tipo!: string;
 
-  @Column()
+  @Column({nullable:true})
   talla!: string;
 
-  @Column()
+  @Column({nullable:true})
   puente!: string;
 
   @Column()
   codImpreso!: string;
 
-  @Column()
+  @Column({nullable:true})
   procedencia!: string;
 
   @Column()
   color!: string;
 
-  @Column()
+  @Column({nullable:true})
   estuche!: string;
 
-  @Column()
+  @Column({nullable:true})
   comentario!: string;
 
   @Column({ type: 'decimal', precision: 10, scale: 2, default: 0 })
@@ -74,7 +74,7 @@ export class Monturas {
   @ManyToOne(() => IngresoMonturas, (ingreso) => ingreso.monturas)
   ingreso!: IngresoMonturas;
 
-  @Column()
+  @Column({nullable:true})
   enmovimiento!: string;
 
   @Column()

@@ -41,7 +41,7 @@ var Shop = (function () {
         tslib_1.__metadata("design:type", String)
     ], Shop.prototype, "num_documento", void 0);
     tslib_1.__decorate([
-        (0, typeorm_1.Column)(),
+        (0, typeorm_1.Column)({ nullable: true }),
         tslib_1.__metadata("design:type", String)
     ], Shop.prototype, "eslogan", void 0);
     tslib_1.__decorate([
@@ -67,7 +67,7 @@ var Shop = (function () {
         tslib_1.__metadata("design:type", String)
     ], Shop.prototype, "rz_social", void 0);
     tslib_1.__decorate([
-        (0, typeorm_1.Column)(),
+        (0, typeorm_1.Column)({ nullable: true }),
         tslib_1.__metadata("design:type", String)
     ], Shop.prototype, "codDomicilioFiscal", void 0);
     tslib_1.__decorate([

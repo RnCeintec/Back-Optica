@@ -59,7 +59,7 @@ import {
     idusuarioenvio!: number;
 
     @OneToMany(() => DetalleMovimiento, (mov) => mov.movimiento)
-    detallesmovimiento!: DetalleMovimiento;
+    detallesmovimiento!: DetalleMovimiento[];
   
   
   }

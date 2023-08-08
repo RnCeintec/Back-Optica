@@ -49,7 +49,7 @@ import {
         @isPhoneNumber({ message: 'Ingrese un número de telefono correcto' })
         telefono!: number
 
-        @Column()
+        @Column({nullable:true})
         observacion!: string
 
       @Column()

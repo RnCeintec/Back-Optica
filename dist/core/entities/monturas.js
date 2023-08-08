@@ -33,7 +33,7 @@ var Monturas = (function () {
         tslib_1.__metadata("design:type", String)
     ], Monturas.prototype, "modelo", void 0);
     tslib_1.__decorate([
-        (0, typeorm_1.Column)(),
+        (0, typeorm_1.Column)({ nullable: true }),
         tslib_1.__metadata("design:type", String)
     ], Monturas.prototype, "colorDescripcion", void 0);
     tslib_1.__decorate([
@@ -41,11 +41,11 @@ var Monturas = (function () {
         tslib_1.__metadata("design:type", String)
     ], Monturas.prototype, "tipo", void 0);
     tslib_1.__decorate([
-        (0, typeorm_1.Column)(),
+        (0, typeorm_1.Column)({ nullable: true }),
         tslib_1.__metadata("design:type", String)
     ], Monturas.prototype, "talla", void 0);
     tslib_1.__decorate([
-        (0, typeorm_1.Column)(),
+        (0, typeorm_1.Column)({ nullable: true }),
         tslib_1.__metadata("design:type", String)
     ], Monturas.prototype, "puente", void 0);
     tslib_1.__decorate([
@@ -53,7 +53,7 @@ var Monturas = (function () {
         tslib_1.__metadata("design:type", String)
     ], Monturas.prototype, "codImpreso", void 0);
     tslib_1.__decorate([
-        (0, typeorm_1.Column)(),
+        (0, typeorm_1.Column)({ nullable: true }),
         tslib_1.__metadata("design:type", String)
     ], Monturas.prototype, "procedencia", void 0);
     tslib_1.__decorate([
@@ -61,11 +61,11 @@ var Monturas = (function () {
         tslib_1.__metadata("design:type", String)
     ], Monturas.prototype, "color", void 0);
     tslib_1.__decorate([
-        (0, typeorm_1.Column)(),
+        (0, typeorm_1.Column)({ nullable: true }),
         tslib_1.__metadata("design:type", String)
     ], Monturas.prototype, "estuche", void 0);
     tslib_1.__decorate([
-        (0, typeorm_1.Column)(),
+        (0, typeorm_1.Column)({ nullable: true }),
         tslib_1.__metadata("design:type", String)
     ], Monturas.prototype, "comentario", void 0);
     tslib_1.__decorate([
@@ -85,7 +85,7 @@ var Monturas = (function () {
         tslib_1.__metadata("design:type", ingreso_monturas_1.IngresoMonturas)
     ], Monturas.prototype, "ingreso", void 0);
     tslib_1.__decorate([
-        (0, typeorm_1.Column)(),
+        (0, typeorm_1.Column)({ nullable: true }),
         tslib_1.__metadata("design:type", String)
     ], Monturas.prototype, "enmovimiento", void 0);
     tslib_1.__decorate([

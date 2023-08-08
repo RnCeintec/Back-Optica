@@ -37,7 +37,7 @@ export class Proveedor {
     @Column()
     celular!: string
 
-    @Column()
+    @Column({nullable:true})
     comentario!: string
 
 

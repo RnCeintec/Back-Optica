@@ -65,7 +65,7 @@ var Movimiento = (function () {
     ], Movimiento.prototype, "idusuarioenvio", void 0);
     tslib_1.__decorate([
         (0, typeorm_1.OneToMany)(function () { return _1.DetalleMovimiento; }, function (mov) { return mov.movimiento; }),
-        tslib_1.__metadata("design:type", _1.DetalleMovimiento)
+        tslib_1.__metadata("design:type", Array)
     ], Movimiento.prototype, "detallesmovimiento", void 0);
     Movimiento = tslib_1.__decorate([
         (0, typeorm_1.Entity)({ name: 'movimiento' })
