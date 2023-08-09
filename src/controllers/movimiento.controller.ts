@@ -11,73 +11,6 @@ import { Historialinventario } from '../core/entities';
 
 
 
-export const listmovimientoventas= async (req: Request, res: Response): Promise<Response> => {
-  try {
-    const { limit, offset, tienda } = req.query;
-
-    const hateoas = new Hateoas({
-      limit: limit ? `${limit}` : undefined,
-      offset: offset
-        // ? search && search !== ''
-        //   ? undefined
-        ? `${offset}`
-        : undefined,
-    });
-
-    const take = hateoas.take;
-    const skip = hateoas.skip;
-
-    let where:
-    | string
-    | ObjectLiteral
-    | FindConditions<Movimiento>
-    | FindConditions<Movimiento>[]
-    | undefined = {};
-
-  
-    if (tienda != "") {
-
-      const tiendas = await getRepository(Shop).findOne({
-        where: { id: tienda},
-      });
-
-      if (!tiendas) {
-        return res.status(404).json({ message: "No existe la tienda" })
-      }
-
-      where = {
-        tienda: tiendas
-      }
-
-    }
-
-    var [result, count] = await getRepository(Movimiento).findAndCount({
-      take,
-      skip: skip * take,
-      where: [
-        {estado : 'pendiente', ...where}
-      ],
-   
-      relations: ['tienda'],
-      order: { fecha: "DESC" }
-    });
-
-  
-
-
-  const [hateoasLink, pages] = hateoas.hateoas({ count });
-    return result
-      ? res.status(200).json({
-        result,
-        count,
-        link: hateoasLink,
-        pages: pages === 0 ? 1 : pages,
-      })
-      : res.status(404).json({ message: 'No existen movimientos' });
-  } catch (error: any) {
-    throw res.status(500).json({ message: error.message ?? error })
-  }
-}
 
 
  export const listamovimiento = async (req: Request, res: Response): Promise<Response> => {
@@ -230,13 +163,7 @@ export const createmovimiento = async (req: Request, res: Response): Promise<Res
 
      }
 
-     const montura = await getRepository(Monturas).findOne(req.params.id);
-    if (!montura) {
-      return res.status(404).json({ message: "Dede enviar id de la montura" })
-    }
-
-
-
+ 
    return  res.json({result: resultall})
 
 
@@ -357,3 +284,71 @@ export const recibirMovimiento = async(req: Request, res: Response): Promise<Res
   
 }
 
+
+export const listmovimientoventas= async (req: Request, res: Response): Promise<Response> => {
+  try {
+    const { limit, offset, tienda } = req.query;
+
+    const hateoas = new Hateoas({
+      limit: limit ? `${limit}` : undefined,
+      offset: offset
+        // ? search && search !== ''
+        //   ? undefined
+        ? `${offset}`
+        : undefined,
+    });
+
+    const take = hateoas.take;
+    const skip = hateoas.skip;
+
+    let where:
+    | string
+    | ObjectLiteral
+    | FindConditions<Movimiento>
+    | FindConditions<Movimiento>[]
+    | undefined = {};
+
+  
+    if (tienda != "") {
+
+      const tiendas = await getRepository(Shop).findOne({
+        where: { id: tienda},
+      });
+
+      if (!tiendas) {
+        return res.status(404).json({ message: "No existe la tienda" })
+      }
+
+      where = {
+        tienda: tiendas
+      }
+
+    }
+
+    var [result, count] = await getRepository(Movimiento).findAndCount({
+      take,
+      skip: skip * take,
+      where: [
+        {estado : 'pendiente', ...where}
+      ],
+   
+      relations: ['tienda'],
+      order: { fecha: "DESC" }
+    });
+
+  
+
+
+  const [hateoasLink, pages] = hateoas.hateoas({ count });
+    return result
+      ? res.status(200).json({
+        result,
+        count,
+        link: hateoasLink,
+        pages: pages === 0 ? 1 : pages,
+      })
+      : res.status(404).json({ message: 'No existen movimientos' });
+  } catch (error: any) {
+    throw res.status(500).json({ message: error.message ?? error })
+  }
+}

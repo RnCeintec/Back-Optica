@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.DetalleMovimiento = exports.Movimiento = exports.Historialmovimiento = exports.Stock = exports.Detalleinventario = exports.Historialinventario = exports.Diotrias = exports.ClientFactura = exports.Laboratorio = exports.Proveedor = exports.Monturas = exports.Vendedor = exports.User = exports.Client = exports.Shop = exports.PymentType = exports.Accesorio = exports.SalesDetails = exports.Sales = void 0;
+exports.DetalleMovimientoP = exports.MovimientoP = exports.DetalleMovimiento = exports.Movimiento = exports.Historialmovimiento = exports.Stock = exports.Detalleinventario = exports.Historialinventario = exports.Diotrias = exports.ClientFactura = exports.Laboratorio = exports.Proveedor = exports.Monturas = exports.Vendedor = exports.User = exports.Client = exports.Shop = exports.PymentType = exports.Accesorio = exports.SalesDetails = exports.Sales = void 0;
 var sales_1 = require("./sales");
 Object.defineProperty(exports, "Sales", { enumerable: true, get: function () { return sales_1.Sales; } });
 var salesDetails_1 = require("./salesDetails");
@@ -39,3 +39,7 @@ var movimiento_1 = require("./movimiento");
 Object.defineProperty(exports, "Movimiento", { enumerable: true, get: function () { return movimiento_1.Movimiento; } });
 var detallemovimiento_1 = require("./detallemovimiento");
 Object.defineProperty(exports, "DetalleMovimiento", { enumerable: true, get: function () { return detallemovimiento_1.DetalleMovimiento; } });
+var movimientop_1 = require("./movimientop");
+Object.defineProperty(exports, "MovimientoP", { enumerable: true, get: function () { return movimientop_1.MovimientoP; } });
+var detallemovimientop_1 = require("./detallemovimientop");
+Object.defineProperty(exports, "DetalleMovimientoP", { enumerable: true, get: function () { return detallemovimientop_1.DetalleMovimientoP; } });
