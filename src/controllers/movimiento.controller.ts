@@ -1,6 +1,6 @@
 import { Historialmovimiento, Shop } from '../core/entities';
 import { Response, Request } from 'express'
-import {getRepository, ObjectLiteral, FindConditions, In, Like, Raw, ObjectID } from 'typeorm'
+import {getRepository, ObjectLiteral, FindConditions, In, Like, Raw, ObjectID, Any } from 'typeorm'
 import { Monturas } from '../core/entities/monturas'
 import { Movimiento } from '../core/entities/movimiento'
 import { DetalleMovimiento } from '../core/entities/detallemovimiento'
@@ -59,7 +59,7 @@ import { Historialinventario } from '../core/entities';
         {  tienda: Like (`${tienda}`), ...where}
       ],
       relations: ['tienda',],
-      order: { fecha: "ASC" }
+      order: { fecha: "DESC" }
     }
     )
       }
@@ -73,7 +73,7 @@ import { Historialinventario } from '../core/entities';
             {...where}
           ],
           relations: ['tienda'],
-          order: { fecha: "ASC" }
+          order: { fecha: "DESC" }
         }
         )
 
@@ -239,3 +239,96 @@ catch (error: any) {
 
 }
 }
+
+
+export const listmovimientoventas= async (req: Request, res: Response): Promise<Response> => {
+  try {
+    const { limit, offset, tienda } = req.query;
+    let where:
+    | string
+    | ObjectLiteral
+    | FindConditions<Movimiento>
+    | FindConditions<Movimiento>[]
+    | undefined = {};
+
+    if (tienda) {
+
+      const tiendas = await getRepository(Shop).findOne({
+        where: { id: tienda, isActive: true },
+      });
+
+      if (!tiendas) {
+        return res.status(404).json({ message: "No existe la tienda" })
+      }
+
+      where = {
+        tienda: tiendas
+      }
+
+    }
+    var [result, count] = await getRepository(Movimiento).findAndCount({
+      where: [
+        {estado : 'pendiente', ...where}
+      ],
+   
+      relations: ['tienda'],
+      order: { fecha: "DESC" }
+    });
+
+    
+    return result
+      ? res.status(200).json({
+        result,
+        count,
+        pages:1,
+      })
+      : res.status(404).json({ message: 'No existen movimientos' });
+  } catch (error: any) {
+    throw res.status(500).json({ message: error.message ?? error })
+  }
+}
+
+export const recibirMovimiento = async(req: Request, res: Response): Promise<Response> => {
+
+  const {idmovimiento,recepcion} = req.body
+
+  
+  const movimiento = await getRepository(Movimiento).findOne({where:{id:idmovimiento},relations: ['detallesmovimiento']})
+
+  if (!movimiento ) {
+    return res.status(404).json({ message: "No existe movimiento" })
+  }
+
+
+  for ( const detalle of movimiento.detallesmovimiento)
+  {
+   const montura = await getRepository(Monturas).findOne({where:{id:detalle.monturasId}})
+   if (!montura ) {
+     return res.status(404).json({ message: "No existe montura" })
+   }
+   montura.enmovimiento = "";
+   montura.tienda = movimiento.tienda;
+
+
+  const result0 = await updateMonturasInteractor(montura)
+
+
+   const Historial_movimiento = new Historialmovimiento()
+   Historial_movimiento.monturasId = detalle.monturasId
+   Historial_movimiento.indicador = "RECEPCIONADO" 
+   Historial_movimiento.tiendaId = detalle.tiendaId
+   Historial_movimiento.comentario = ""
+   const result3 = await getRepository(Historialmovimiento).save(Historial_movimiento)
+
+  }
+
+
+  movimiento.userId = recepcion
+  movimiento.estado = "recibido"
+
+
+  const result = await getRepository(Movimiento).save(movimiento);
+   return res.json({result : result })
+  
+}
+

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteMovimiento = exports.searchMovimiento = exports.createmovimiento = exports.listamovimiento = void 0;
+exports.recibirMovimiento = exports.listmovimientoventas = exports.deleteMovimiento = exports.searchMovimiento = exports.createmovimiento = exports.listamovimiento = void 0;
 var tslib_1 = require("tslib");
 var entities_1 = require("../core/entities");
 var typeorm_1 = require("typeorm");
@@ -48,7 +48,7 @@ var listamovimiento = function (req, res) { return tslib_1.__awaiter(void 0, voi
                             tslib_1.__assign({ tienda: (0, typeorm_1.Like)("".concat(tienda)) }, where)
                         ],
                         relations: ['tienda',],
-                        order: { fecha: "ASC" }
+                        order: { fecha: "DESC" }
                     })];
             case 3:
                 _b = _f.sent(), result = _b[0], count = _b[1];
@@ -60,7 +60,7 @@ var listamovimiento = function (req, res) { return tslib_1.__awaiter(void 0, voi
                         tslib_1.__assign({}, where)
                     ],
                     relations: ['tienda'],
-                    order: { fecha: "ASC" }
+                    order: { fecha: "DESC" }
                 })];
             case 5:
                 _c = _f.sent(), result = _c[0], count = _c[1];
@@ -233,3 +233,100 @@ var deleteMovimiento = function (req, res) { return tslib_1.__awaiter(void 0, vo
     });
 }); };
 exports.deleteMovimiento = deleteMovimiento;
+var listmovimientoventas = function (req, res) { return tslib_1.__awaiter(void 0, void 0, void 0, function () {
+    var _a, limit, offset, tienda, where, tiendas, _b, result, count, error_5;
+    var _c;
+    return tslib_1.__generator(this, function (_d) {
+        switch (_d.label) {
+            case 0:
+                _d.trys.push([0, 4, , 5]);
+                _a = req.query, limit = _a.limit, offset = _a.offset, tienda = _a.tienda;
+                where = {};
+                if (!tienda) return [3, 2];
+                return [4, (0, typeorm_1.getRepository)(entities_1.Shop).findOne({
+                        where: { id: tienda, isActive: true },
+                    })];
+            case 1:
+                tiendas = _d.sent();
+                if (!tiendas) {
+                    return [2, res.status(404).json({ message: "No existe la tienda" })];
+                }
+                where = {
+                    tienda: tiendas
+                };
+                _d.label = 2;
+            case 2: return [4, (0, typeorm_1.getRepository)(movimiento_1.Movimiento).findAndCount({
+                    where: [
+                        tslib_1.__assign({ estado: 'pendiente' }, where)
+                    ],
+                    relations: ['tienda'],
+                    order: { fecha: "DESC" }
+                })];
+            case 3:
+                _b = _d.sent(), result = _b[0], count = _b[1];
+                return [2, result
+                        ? res.status(200).json({
+                            result: result,
+                            count: count,
+                            pages: 1,
+                        })
+                        : res.status(404).json({ message: 'No existen movimientos' })];
+            case 4:
+                error_5 = _d.sent();
+                throw res.status(500).json({ message: (_c = error_5.message) !== null && _c !== void 0 ? _c : error_5 });
+            case 5: return [2];
+        }
+    });
+}); };
+exports.listmovimientoventas = listmovimientoventas;
+var recibirMovimiento = function (req, res) { return tslib_1.__awaiter(void 0, void 0, void 0, function () {
+    var _a, idmovimiento, recepcion, movimiento, _i, _b, detalle, montura, result0, Historial_movimiento, result3, result;
+    return tslib_1.__generator(this, function (_c) {
+        switch (_c.label) {
+            case 0:
+                _a = req.body, idmovimiento = _a.idmovimiento, recepcion = _a.recepcion;
+                return [4, (0, typeorm_1.getRepository)(movimiento_1.Movimiento).findOne({ where: { id: idmovimiento }, relations: ['detallesmovimiento'] })];
+            case 1:
+                movimiento = _c.sent();
+                if (!movimiento) {
+                    return [2, res.status(404).json({ message: "No existe movimiento" })];
+                }
+                _i = 0, _b = movimiento.detallesmovimiento;
+                _c.label = 2;
+            case 2:
+                if (!(_i < _b.length)) return [3, 7];
+                detalle = _b[_i];
+                return [4, (0, typeorm_1.getRepository)(monturas_1.Monturas).findOne({ where: { id: detalle.monturasId } })];
+            case 3:
+                montura = _c.sent();
+                if (!montura) {
+                    return [2, res.status(404).json({ message: "No existe montura" })];
+                }
+                montura.enmovimiento = "";
+                montura.tienda = movimiento.tienda;
+                return [4, (0, monturas_2.updateMonturasInteractor)(montura)];
+            case 4:
+                result0 = _c.sent();
+                Historial_movimiento = new entities_1.Historialmovimiento();
+                Historial_movimiento.monturasId = detalle.monturasId;
+                Historial_movimiento.indicador = "RECEPCIONADO";
+                Historial_movimiento.tiendaId = detalle.tiendaId;
+                Historial_movimiento.comentario = "";
+                return [4, (0, typeorm_1.getRepository)(entities_1.Historialmovimiento).save(Historial_movimiento)];
+            case 5:
+                result3 = _c.sent();
+                _c.label = 6;
+            case 6:
+                _i++;
+                return [3, 2];
+            case 7:
+                movimiento.userId = recepcion;
+                movimiento.estado = "recibido";
+                return [4, (0, typeorm_1.getRepository)(movimiento_1.Movimiento).save(movimiento)];
+            case 8:
+                result = _c.sent();
+                return [2, res.json({ result: result })];
+        }
+    });
+}); };
+exports.recibirMovimiento = recibirMovimiento;
