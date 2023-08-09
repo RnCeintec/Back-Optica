@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.recibirMovimiento = exports.listmovimientoventas = exports.deleteMovimiento = exports.searchMovimiento = exports.createmovimiento = exports.listamovimiento = void 0;
+exports.recibirMovimiento = exports.deleteMovimiento = exports.searchMovimiento = exports.createmovimiento = exports.listamovimiento = exports.listmovimientoventas = void 0;
 var tslib_1 = require("tslib");
 var entities_1 = require("../core/entities");
 var typeorm_1 = require("typeorm");
@@ -9,8 +9,66 @@ var movimiento_1 = require("../core/entities/movimiento");
 var detallemovimiento_1 = require("../core/entities/detallemovimiento");
 var utils_1 = require("../utils");
 var monturas_2 = require("../core/interactor/monturas");
+var listmovimientoventas = function (req, res) { return tslib_1.__awaiter(void 0, void 0, void 0, function () {
+    var _a, limit, offset, tienda, hateoas, take, skip, where, tiendas, _b, result, count, _c, hateoasLink, pages, error_1;
+    var _d;
+    return tslib_1.__generator(this, function (_e) {
+        switch (_e.label) {
+            case 0:
+                _e.trys.push([0, 4, , 5]);
+                _a = req.query, limit = _a.limit, offset = _a.offset, tienda = _a.tienda;
+                hateoas = new utils_1.Hateoas({
+                    limit: limit ? "".concat(limit) : undefined,
+                    offset: offset
+                        ? "".concat(offset)
+                        : undefined,
+                });
+                take = hateoas.take;
+                skip = hateoas.skip;
+                where = {};
+                if (!(tienda != "")) return [3, 2];
+                return [4, (0, typeorm_1.getRepository)(entities_1.Shop).findOne({
+                        where: { id: tienda },
+                    })];
+            case 1:
+                tiendas = _e.sent();
+                if (!tiendas) {
+                    return [2, res.status(404).json({ message: "No existe la tienda" })];
+                }
+                where = {
+                    tienda: tiendas
+                };
+                _e.label = 2;
+            case 2: return [4, (0, typeorm_1.getRepository)(movimiento_1.Movimiento).findAndCount({
+                    take: take,
+                    skip: skip * take,
+                    where: [
+                        tslib_1.__assign({ estado: 'pendiente' }, where)
+                    ],
+                    relations: ['tienda'],
+                    order: { fecha: "DESC" }
+                })];
+            case 3:
+                _b = _e.sent(), result = _b[0], count = _b[1];
+                _c = hateoas.hateoas({ count: count }), hateoasLink = _c[0], pages = _c[1];
+                return [2, result
+                        ? res.status(200).json({
+                            result: result,
+                            count: count,
+                            link: hateoasLink,
+                            pages: pages === 0 ? 1 : pages,
+                        })
+                        : res.status(404).json({ message: 'No existen movimientos' })];
+            case 4:
+                error_1 = _e.sent();
+                throw res.status(500).json({ message: (_d = error_1.message) !== null && _d !== void 0 ? _d : error_1 });
+            case 5: return [2];
+        }
+    });
+}); };
+exports.listmovimientoventas = listmovimientoventas;
 var listamovimiento = function (req, res) { return tslib_1.__awaiter(void 0, void 0, void 0, function () {
-    var _a, limit, offset, tienda, hateoas, take, skip, where, tiendas, _b, result, count, _c, result, count, _d, hateoasLink, pages, error_1;
+    var _a, limit, offset, tienda, hateoas, take, skip, where, tiendas, _b, result, count, _c, result, count, _d, hateoasLink, pages, error_2;
     var _e;
     return tslib_1.__generator(this, function (_f) {
         switch (_f.label) {
@@ -76,15 +134,15 @@ var listamovimiento = function (req, res) { return tslib_1.__awaiter(void 0, voi
                         })
                         : res.status(404).json({ message: 'No existen movimientos' })];
             case 7:
-                error_1 = _f.sent();
-                throw res.status(500).json({ message: (_e = error_1.message) !== null && _e !== void 0 ? _e : error_1 });
+                error_2 = _f.sent();
+                throw res.status(500).json({ message: (_e = error_2.message) !== null && _e !== void 0 ? _e : error_2 });
             case 8: return [2];
         }
     });
 }); };
 exports.listamovimiento = listamovimiento;
 var createmovimiento = function (req, res) { return tslib_1.__awaiter(void 0, void 0, void 0, function () {
-    var _a, monturasmovimiento, ruc, razonsocial, documento, nrodocumento, fechafacturacion, responsable, resultall, movimiento, result0, _i, monturasmovimiento_1, datos, monturadata, detalle_movimiento, result, result2, Historial_movimiento, resulth, montura, error_2;
+    var _a, monturasmovimiento, ruc, razonsocial, documento, nrodocumento, fechafacturacion, responsable, resultall, movimiento, result0, _i, monturasmovimiento_1, datos, monturadata, detalle_movimiento, result, result2, Historial_movimiento, resulth, montura, error_3;
     var _b;
     return tslib_1.__generator(this, function (_c) {
         switch (_c.label) {
@@ -146,15 +204,15 @@ var createmovimiento = function (req, res) { return tslib_1.__awaiter(void 0, vo
                 }
                 return [2, res.json({ result: resultall })];
             case 10:
-                error_2 = _c.sent();
-                throw res.status(500).json({ message: (_b = error_2.message) !== null && _b !== void 0 ? _b : error_2 });
+                error_3 = _c.sent();
+                throw res.status(500).json({ message: (_b = error_3.message) !== null && _b !== void 0 ? _b : error_3 });
             case 11: return [2];
         }
     });
 }); };
 exports.createmovimiento = createmovimiento;
 var searchMovimiento = function (req, res) { return tslib_1.__awaiter(void 0, void 0, void 0, function () {
-    var movimiento, error_3;
+    var movimiento, error_4;
     var _a;
     return tslib_1.__generator(this, function (_b) {
         switch (_b.label) {
@@ -168,15 +226,15 @@ var searchMovimiento = function (req, res) { return tslib_1.__awaiter(void 0, vo
                 }
                 return [2, res.status(200).json({ result: movimiento })];
             case 2:
-                error_3 = _b.sent();
-                throw res.status(500).json({ message: (_a = error_3.message) !== null && _a !== void 0 ? _a : error_3 });
+                error_4 = _b.sent();
+                throw res.status(500).json({ message: (_a = error_4.message) !== null && _a !== void 0 ? _a : error_4 });
             case 3: return [2];
         }
     });
 }); };
 exports.searchMovimiento = searchMovimiento;
 var deleteMovimiento = function (req, res) { return tslib_1.__awaiter(void 0, void 0, void 0, function () {
-    var movimiento, _i, _a, detalle, montura, result0, result2, Historial_movimiento, result3, result, error_4;
+    var movimiento, _i, _a, detalle, montura, result0, result2, Historial_movimiento, result3, result, error_5;
     var _b;
     return tslib_1.__generator(this, function (_c) {
         switch (_c.label) {
@@ -226,65 +284,19 @@ var deleteMovimiento = function (req, res) { return tslib_1.__awaiter(void 0, vo
                 result = _c.sent();
                 return [2, res.json({ result: result })];
             case 10:
-                error_4 = _c.sent();
-                throw res.status(500).json({ message: (_b = error_4.message) !== null && _b !== void 0 ? _b : error_4 });
+                error_5 = _c.sent();
+                throw res.status(500).json({ message: (_b = error_5.message) !== null && _b !== void 0 ? _b : error_5 });
             case 11: return [2];
         }
     });
 }); };
 exports.deleteMovimiento = deleteMovimiento;
-var listmovimientoventas = function (req, res) { return tslib_1.__awaiter(void 0, void 0, void 0, function () {
-    var _a, limit, offset, tienda, where, tiendas, _b, result, count, error_5;
-    var _c;
-    return tslib_1.__generator(this, function (_d) {
-        switch (_d.label) {
-            case 0:
-                _d.trys.push([0, 4, , 5]);
-                _a = req.query, limit = _a.limit, offset = _a.offset, tienda = _a.tienda;
-                where = {};
-                if (!tienda) return [3, 2];
-                return [4, (0, typeorm_1.getRepository)(entities_1.Shop).findOne({
-                        where: { id: tienda, isActive: true },
-                    })];
-            case 1:
-                tiendas = _d.sent();
-                if (!tiendas) {
-                    return [2, res.status(404).json({ message: "No existe la tienda" })];
-                }
-                where = {
-                    tienda: tiendas
-                };
-                _d.label = 2;
-            case 2: return [4, (0, typeorm_1.getRepository)(movimiento_1.Movimiento).findAndCount({
-                    where: [
-                        tslib_1.__assign({ estado: 'pendiente' }, where)
-                    ],
-                    relations: ['tienda'],
-                    order: { fecha: "DESC" }
-                })];
-            case 3:
-                _b = _d.sent(), result = _b[0], count = _b[1];
-                return [2, result
-                        ? res.status(200).json({
-                            result: result,
-                            count: count,
-                            pages: 1,
-                        })
-                        : res.status(404).json({ message: 'No existen movimientos' })];
-            case 4:
-                error_5 = _d.sent();
-                throw res.status(500).json({ message: (_c = error_5.message) !== null && _c !== void 0 ? _c : error_5 });
-            case 5: return [2];
-        }
-    });
-}); };
-exports.listmovimientoventas = listmovimientoventas;
 var recibirMovimiento = function (req, res) { return tslib_1.__awaiter(void 0, void 0, void 0, function () {
-    var _a, idmovimiento, recepcion, movimiento, _i, _b, detalle, montura, result0, Historial_movimiento, result3, result;
+    var _a, idmovimiento, idtienda, recepcion, movimiento, _i, _b, detalle, montura, result0, Historial_movimiento, result3, result;
     return tslib_1.__generator(this, function (_c) {
         switch (_c.label) {
             case 0:
-                _a = req.body, idmovimiento = _a.idmovimiento, recepcion = _a.recepcion;
+                _a = req.body, idmovimiento = _a.idmovimiento, idtienda = _a.idtienda, recepcion = _a.recepcion;
                 return [4, (0, typeorm_1.getRepository)(movimiento_1.Movimiento).findOne({ where: { id: idmovimiento }, relations: ['detallesmovimiento'] })];
             case 1:
                 movimiento = _c.sent();
@@ -303,7 +315,7 @@ var recibirMovimiento = function (req, res) { return tslib_1.__awaiter(void 0, v
                     return [2, res.status(404).json({ message: "No existe montura" })];
                 }
                 montura.enmovimiento = "";
-                montura.tienda = movimiento.tienda;
+                montura.tienda = idtienda;
                 return [4, (0, monturas_2.updateMonturasInteractor)(montura)];
             case 4:
                 result0 = _c.sent();
