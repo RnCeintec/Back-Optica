@@ -236,16 +236,7 @@ export const createStock = async (req: Request, res: Response): Promise<Response
 export const listaStock = async (req: Request, res: Response): Promise<Response> => {
   try {
     const {limit, offset, search,tienda } = req.query;
-  //   const hateoas = new Hateoas({
-  //     limit: limit ? `${limit}` : undefined,
-  //     offset: offset
-  //       // ? search && search !== ''
-  //       //   ? undefined
-  //         ? `${offset}`
-  //       : undefined,
-  //   });
-  // const take = hateoas.take;
-  // const skip = hateoas.skip;
+
 
     let where:
     | string
@@ -351,5 +342,51 @@ export const listaStock = async (req: Request, res: Response): Promise<Response>
   } catch (error: any) {
     throw res.status(500).json({ message: error.message ?? error })
   }
+}
+ 
+
+
+
+export const listaProductall = async (req: Request, res: Response): Promise<Response> => {
+  try {
+    const {limit, offset } = req.query;
+   
+    let where:
+    | string
+    | ObjectLiteral
+    | FindConditions<Accesorio>
+    | FindConditions<Accesorio>[]
+    | undefined = { isActive: true };
+    const  [result, count] = await getRepository(Accesorio).findAndCount({
+      
+        where : [
+            {
+                ...where
+              },
+              {
+                ...where
+              },
+          
+              {
+                ...where,
+          }
+      
+      ],
+   
+      order: {fecha_actualizacion:"DESC"}
+      });
+
+      return result
+      ? res.status(200).json({
+        result,
+        count,
+        // link: hateoasLink,
+        pages: 1, 
+          })
+        : res.status(404).json({ message: 'No existen productos' });
+  }catch(error:any){
+    throw res.status(500).json({message: error.message ?? error})
+  }
+  
 }
  

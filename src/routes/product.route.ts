@@ -1,5 +1,5 @@
 import {Router} from 'express'
-import {createProduct,updateProduct,deleteProduct,listProducts,searchProduct,listProductsParaVenta,listaStock} from '../controllers/product.controller'
+import {createProduct,updateProduct,deleteProduct,listProducts,searchProduct,listProductsParaVenta,listaStock,listaProductall} from '../controllers/product.controller'
 
 const router = Router()
 
@@ -10,7 +10,7 @@ router.get('/accesorios',listProducts);
 router.get('/accesoriosVenta',listProductsParaVenta);
 router.get('/accesorios/:id',searchProduct);
 router.get('/stock/',listaStock);
-
+router.get('/accesoriosall/',listaProductall);
 
 
 export default router;

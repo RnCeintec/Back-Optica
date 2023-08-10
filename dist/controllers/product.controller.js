@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.listaStock = exports.createStock = exports.searchProduct = exports.listProductsParaVenta = exports.listProducts = exports.deleteProduct = exports.updateProduct = exports.createProduct = void 0;
+exports.listaProductall = exports.listaStock = exports.createStock = exports.searchProduct = exports.listProductsParaVenta = exports.listProducts = exports.deleteProduct = exports.updateProduct = exports.createProduct = void 0;
 var tslib_1 = require("tslib");
 var typeorm_1 = require("typeorm");
 var accesorio_1 = require("../core/entities/accesorio");
@@ -292,3 +292,37 @@ var listaStock = function (req, res) { return tslib_1.__awaiter(void 0, void 0, 
     });
 }); };
 exports.listaStock = listaStock;
+var listaProductall = function (req, res) { return tslib_1.__awaiter(void 0, void 0, void 0, function () {
+    var _a, limit, offset, where, _b, result, count, error_9;
+    var _c;
+    return tslib_1.__generator(this, function (_d) {
+        switch (_d.label) {
+            case 0:
+                _d.trys.push([0, 2, , 3]);
+                _a = req.query, limit = _a.limit, offset = _a.offset;
+                where = { isActive: true };
+                return [4, (0, typeorm_1.getRepository)(accesorio_1.Accesorio).findAndCount({
+                        where: [
+                            tslib_1.__assign({}, where),
+                            tslib_1.__assign({}, where),
+                            tslib_1.__assign({}, where)
+                        ],
+                        order: { fecha_actualizacion: "DESC" }
+                    })];
+            case 1:
+                _b = _d.sent(), result = _b[0], count = _b[1];
+                return [2, result
+                        ? res.status(200).json({
+                            result: result,
+                            count: count,
+                            pages: 1,
+                        })
+                        : res.status(404).json({ message: 'No existen productos' })];
+            case 2:
+                error_9 = _d.sent();
+                throw res.status(500).json({ message: (_c = error_9.message) !== null && _c !== void 0 ? _c : error_9 });
+            case 3: return [2];
+        }
+    });
+}); };
+exports.listaProductall = listaProductall;
