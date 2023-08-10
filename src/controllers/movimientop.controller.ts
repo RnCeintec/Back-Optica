@@ -8,7 +8,7 @@ import { DetalleMovimientoP } from '../core/entities/detallemovimientop'
 import { encrypt } from '../utils';
 import { Hateoas } from '../utils';
 import { updateProductInteractor } from '../core/interactor/accesorio';
-
+import { Stock } from '../core/entities';
 
 
 
@@ -179,162 +179,158 @@ export const createmovimientop = async (req: Request, res: Response): Promise<Re
 
 
 
-// export const deleteMovimiento= async (req: Request, res: Response): Promise<Response> => {
-//   try {
-//     const movimiento = await getRepository(MovimientoP).findOne({where:{id:req.params.id},relations: ['detallesmovimiento']})
+ export const deleteMovimientop= async (req: Request, res: Response): Promise<Response> => {
+  try {
+    const movimientop = await getRepository(MovimientoP).findOne({where:{id:req.params.id},relations: ['detallesmovimientop']})
 
-//     if (!movimiento ) {
-//       return res.status(404).json({ message: "No existe movimiento" })
-//     }
+    if (!movimientop ) {
+      return res.status(404).json({ message: "No existe movimiento" })
+    }
 
-//    for ( const detalle of movimiento.detallesmovimiento)
-//    {
-//     const montura = await getRepository(Monturas).findOne({where:{id:detalle.monturasId}})
-//     if (!montura ) {
-//       return res.status(404).json({ message: "No existe montura" })
-//     }
-//     montura.enmovimiento = ""
-//     const result0 = await updateMonturasInteractor(montura)
+   for ( const detalle of movimientop.detallesmovimientop)
+   {
+    const producto = await getRepository(Accesorio).findOne({where:{id:detalle.accesorioId}})
+    if (!producto ) {
+      return res.status(404).json({ message: "No existe montura" })
+    }
 
-//     detalle.isActive = false;
-//     const result2 = await getRepository(DetalleMovimiento).save(detalle);
+    const total =  producto.stock + detalle.cantidad
+    producto.stock = total
+    const result0 = await updateProductInteractor(producto)
 
-//     const Historial_movimiento = new Historialmovimiento()
-//     Historial_movimiento.monturasId = detalle.monturasId
-//     Historial_movimiento.indicador = "CANCELADO" 
-//     Historial_movimiento.tiendaId = detalle.tiendaId
-//     Historial_movimiento.comentario = ""
-//     const result3 = await getRepository(Historialmovimiento).save(Historial_movimiento)
+    detalle.isActive = false;
+    const result2 = await getRepository(DetalleMovimientoP).save(detalle);
 
-//    }
+
+   }
 
     
-//    movimiento.estado = "eliminado"
+   movimientop.estado = "eliminado"
 
-//    const result = await getRepository(Movimiento).save(movimiento);
-//     return res.json({result : result })
+   const result = await getRepository(MovimientoP).save(movimientop);
+    return res.json({result : result })
 
-//   }
+  }
 
-// catch (error: any) {
-//   throw res.status(500).json({ message: error.message ?? error })
+catch (error: any) {
+  throw res.status(500).json({ message: error.message ?? error })
 
-// }
-// }
+}
+ }
 
 
 
-// export const recibirMovimientop = async(req: Request, res: Response): Promise<Response> => {
+export const recibirMovimientop = async(req: Request, res: Response): Promise<Response> => {
 
-//   const {idmovimiento,idtienda,recepcion} = req.body
+  const {idmovimientop,idtienda,recepcion} = req.body
 
   
-//   const movimiento = await getRepository(Movimiento).findOne({where:{id:idmovimiento},relations: ['detallesmovimiento']})
+  const movimientop = await getRepository(MovimientoP).findOne({where:{id:idmovimientop},relations: ['detallesmovimientop']})
 
-//   if (!movimiento ) {
-//     return res.status(404).json({ message: "No existe movimiento" })
-//   }
+  if (!movimientop ) {
+    return res.status(404).json({ message: "No existe movimiento" })
+  }
 
 
-//   for ( const detalle of movimiento.detallesmovimiento)
-//   {
+  for ( const detalle of movimientop.detallesmovimientop)
+  {
 
-//    const montura = await getRepository(Monturas).findOne({where:{id:detalle.monturasId}})
+   const stock = await getRepository(Stock).findOne({where:[{accesorioId:detalle.accesorioId, tiendaId:detalle.tiendaId }]})
 
-//    if (!montura ) {
-//      return res.status(404).json({ message: "No existe montura" })
-//    }
-//    montura.enmovimiento = "";
-//    montura.tienda = idtienda;
+   if (!stock ) {
+   const stock0 = new Stock()
+   stock0.accesorioId = detalle.accesorioId
+   stock0.tiendaId = detalle.tiendaId
+   stock0.cant_tienda = detalle.cantidad
+   stock0.smt = 0
+   const results = await getRepository(Stock).save(stock0)
 
+     return res.json({ message: "Stock de productos creado" })
+   }
+   stock.cant_tienda = stock.cant_tienda + detalle.cantidad
  
-//   const result0 = await updateMonturasInteractor(montura)
-
-//    const Historial_movimiento = new Historialmovimiento()
-//    Historial_movimiento.monturasId = detalle.monturasId
-//    Historial_movimiento.indicador = "RECEPCIONADO" 
-//    Historial_movimiento.tiendaId = detalle.tiendaId
-//    Historial_movimiento.comentario = ""
-//    const result3 = await getRepository(Historialmovimiento).save(Historial_movimiento)
-
-//   }
+   const result0 = await getRepository(Stock).save(stock)
 
 
-//   movimiento.userId = recepcion
-//   movimiento.estado = "recibido"
+
+  }
 
 
-//   const result = await getRepository(Movimiento).save(movimiento);
-//    return res.json({result : result })
+  movimientop.userId = recepcion
+  movimientop.estado = "recibido"
+
+
+  const result = await getRepository(MovimientoP).save(movimientop);
+   return res.json({result : result })
   
-// }
+}
 
 
 
-// export const listmovimientoventasp= async (req: Request, res: Response): Promise<Response> => {
-//   try {
-//     const { limit, offset, tienda } = req.query;
+export const listmovimientoventasp= async (req: Request, res: Response): Promise<Response> => {
+  try {
+    const { limit, offset, tienda } = req.query;
 
-//     const hateoas = new Hateoas({
-//       limit: limit ? `${limit}` : undefined,
-//       offset: offset
-//         // ? search && search !== ''
-//         //   ? undefined
-//         ? `${offset}`
-//         : undefined,
-//     });
+    const hateoas = new Hateoas({
+      limit: limit ? `${limit}` : undefined,
+      offset: offset
+        // ? search && search !== ''
+        //   ? undefined
+        ? `${offset}`
+        : undefined,
+    });
 
-//     const take = hateoas.take;
-//     const skip = hateoas.skip;
+    const take = hateoas.take;
+    const skip = hateoas.skip;
 
-//     let where:
-//     | string
-//     | ObjectLiteral
-//     | FindConditions<Movimiento>
-//     | FindConditions<Movimiento>[]
-//     | undefined = {};
+    let where:
+    | string
+    | ObjectLiteral
+    | FindConditions<MovimientoP>
+    | FindConditions<MovimientoP>[]
+    | undefined = {};
 
   
-//     if (tienda != "") {
+    if (tienda != "") {
 
-//       const tiendas = await getRepository(Shop).findOne({
-//         where: { id: tienda},
-//       });
+      const tiendas = await getRepository(Shop).findOne({
+        where: { id: tienda},
+      });
 
-//       if (!tiendas) {
-//         return res.status(404).json({ message: "No existe la tienda" })
-//       }
+      if (!tiendas) {
+        return res.status(404).json({ message: "No existe la tienda" })
+      }
 
-//       where = {
-//         tienda: tiendas
-//       }
+      where = {
+        tienda: tiendas
+      }
 
-//     }
+    }
 
-//     var [result, count] = await getRepository(Movimiento).findAndCount({
-//       take,
-//       skip: skip * take,
-//       where: [
-//         {estado : 'pendiente', ...where}
-//       ],
+    var [result, count] = await getRepository(MovimientoP).findAndCount({
+      take,
+      skip: skip * take,
+      where: [
+        {estado : 'pendiente', ...where}
+      ],
    
-//       relations: ['tienda'],
-//       order: { fecha: "DESC" }
-//     });
+      relations: ['tienda'],
+      order: { fecha: "DESC" }
+    });
 
   
 
 
-//   const [hateoasLink, pages] = hateoas.hateoas({ count });
-//     return result
-//       ? res.status(200).json({
-//         result,
-//         count,
-//         link: hateoasLink,
-//         pages: pages === 0 ? 1 : pages,
-//       })
-//       : res.status(404).json({ message: 'No existen movimientos' });
-//   } catch (error: any) {
-//     throw res.status(500).json({ message: error.message ?? error })
-//   }
-// }
+  const [hateoasLink, pages] = hateoas.hateoas({ count });
+    return result
+      ? res.status(200).json({
+        result,
+        count,
+        link: hateoasLink,
+        pages: pages === 0 ? 1 : pages,
+      })
+      : res.status(404).json({ message: 'No existen movimientos' });
+  } catch (error: any) {
+    throw res.status(500).json({ message: error.message ?? error })
+  }
+}

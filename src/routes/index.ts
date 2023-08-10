@@ -20,6 +20,7 @@ import diotriasRoute from "./diotrias.route";
 import detalleInventarioRoute from "./detalleInventario.route";
 import HistorialMovimientoRoute from "./historialmovimiento.route";
 import movimientoRoute from "./movimiento.route";
+import movimientopRoute from "./movimientoP.route";
 export default ({ app, version }: { app: Express; version: string }) => {
   app.use(version, userRoute);
   app.use(version, loginRoute);
@@ -40,5 +41,5 @@ export default ({ app, version }: { app: Express; version: string }) => {
   app.use(version,detalleInventarioRoute);
   app.use(version,HistorialMovimientoRoute);
   app.use(version,movimientoRoute);
-
+  app.use(version,movimientopRoute);
 };

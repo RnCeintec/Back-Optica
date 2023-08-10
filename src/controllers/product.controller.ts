@@ -24,13 +24,6 @@ export const createProduct = async (req:Request,res:Response): Promise<Response>
         const result = await createProductInteractor(product)
 
 
-        const productTienda = new Stock()
-        productTienda.accesorioId = result.id;
-        productTienda.tiendaId = idTienda;
-        productTienda.cant_tienda = result.stock;
-        productTienda.smt = 0;
-        const result0 = await getRepository(Stock).save(productTienda);
-
         return res.json({result:result})
 
     }catch(error:any){

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.searchMovimientop = exports.createmovimientop = exports.listamovimientop = void 0;
+exports.listmovimientoventasp = exports.recibirMovimientop = exports.deleteMovimientop = exports.searchMovimientop = exports.createmovimientop = exports.listamovimientop = void 0;
 var tslib_1 = require("tslib");
 var entities_1 = require("../core/entities");
 var typeorm_1 = require("typeorm");
@@ -9,6 +9,7 @@ var movimientop_1 = require("../core/entities/movimientop");
 var detallemovimientop_1 = require("../core/entities/detallemovimientop");
 var utils_1 = require("../utils");
 var accesorio_1 = require("../core/interactor/accesorio");
+var entities_3 = require("../core/entities");
 var listamovimientop = function (req, res) { return tslib_1.__awaiter(void 0, void 0, void 0, function () {
     var _a, limit, offset, tienda, hateoas, take, skip, where, tiendas, _b, result, count, _c, result, count, _d, hateoasLink, pages, error_1;
     var _e;
@@ -158,3 +159,162 @@ var searchMovimientop = function (req, res) { return tslib_1.__awaiter(void 0, v
     });
 }); };
 exports.searchMovimientop = searchMovimientop;
+var deleteMovimientop = function (req, res) { return tslib_1.__awaiter(void 0, void 0, void 0, function () {
+    var movimientop, _i, _a, detalle, producto, total, result0, result2, result, error_4;
+    var _b;
+    return tslib_1.__generator(this, function (_c) {
+        switch (_c.label) {
+            case 0:
+                _c.trys.push([0, 9, , 10]);
+                return [4, (0, typeorm_1.getRepository)(movimientop_1.MovimientoP).findOne({ where: { id: req.params.id }, relations: ['detallesmovimientop'] })];
+            case 1:
+                movimientop = _c.sent();
+                if (!movimientop) {
+                    return [2, res.status(404).json({ message: "No existe movimiento" })];
+                }
+                _i = 0, _a = movimientop.detallesmovimientop;
+                _c.label = 2;
+            case 2:
+                if (!(_i < _a.length)) return [3, 7];
+                detalle = _a[_i];
+                return [4, (0, typeorm_1.getRepository)(entities_2.Accesorio).findOne({ where: { id: detalle.accesorioId } })];
+            case 3:
+                producto = _c.sent();
+                if (!producto) {
+                    return [2, res.status(404).json({ message: "No existe montura" })];
+                }
+                total = producto.stock + detalle.cantidad;
+                producto.stock = total;
+                return [4, (0, accesorio_1.updateProductInteractor)(producto)];
+            case 4:
+                result0 = _c.sent();
+                detalle.isActive = false;
+                return [4, (0, typeorm_1.getRepository)(detallemovimientop_1.DetalleMovimientoP).save(detalle)];
+            case 5:
+                result2 = _c.sent();
+                _c.label = 6;
+            case 6:
+                _i++;
+                return [3, 2];
+            case 7:
+                movimientop.estado = "eliminado";
+                return [4, (0, typeorm_1.getRepository)(movimientop_1.MovimientoP).save(movimientop)];
+            case 8:
+                result = _c.sent();
+                return [2, res.json({ result: result })];
+            case 9:
+                error_4 = _c.sent();
+                throw res.status(500).json({ message: (_b = error_4.message) !== null && _b !== void 0 ? _b : error_4 });
+            case 10: return [2];
+        }
+    });
+}); };
+exports.deleteMovimientop = deleteMovimientop;
+var recibirMovimientop = function (req, res) { return tslib_1.__awaiter(void 0, void 0, void 0, function () {
+    var _a, idmovimientop, idtienda, recepcion, movimientop, _i, _b, detalle, stock, stock0, results, result0, result;
+    return tslib_1.__generator(this, function (_c) {
+        switch (_c.label) {
+            case 0:
+                _a = req.body, idmovimientop = _a.idmovimientop, idtienda = _a.idtienda, recepcion = _a.recepcion;
+                return [4, (0, typeorm_1.getRepository)(movimientop_1.MovimientoP).findOne({ where: { id: idmovimientop }, relations: ['detallesmovimientop'] })];
+            case 1:
+                movimientop = _c.sent();
+                if (!movimientop) {
+                    return [2, res.status(404).json({ message: "No existe movimiento" })];
+                }
+                _i = 0, _b = movimientop.detallesmovimientop;
+                _c.label = 2;
+            case 2:
+                if (!(_i < _b.length)) return [3, 8];
+                detalle = _b[_i];
+                return [4, (0, typeorm_1.getRepository)(entities_3.Stock).findOne({ where: [{ accesorioId: detalle.accesorioId, tiendaId: detalle.tiendaId }] })];
+            case 3:
+                stock = _c.sent();
+                if (!!stock) return [3, 5];
+                stock0 = new entities_3.Stock();
+                stock0.accesorioId = detalle.accesorioId;
+                stock0.tiendaId = detalle.tiendaId;
+                stock0.cant_tienda = detalle.cantidad;
+                stock0.smt = 0;
+                return [4, (0, typeorm_1.getRepository)(entities_3.Stock).save(stock0)];
+            case 4:
+                results = _c.sent();
+                return [2, res.json({ message: "Stock de productos creado" })];
+            case 5:
+                stock.cant_tienda = stock.cant_tienda + detalle.cantidad;
+                return [4, (0, typeorm_1.getRepository)(entities_3.Stock).save(stock)];
+            case 6:
+                result0 = _c.sent();
+                _c.label = 7;
+            case 7:
+                _i++;
+                return [3, 2];
+            case 8:
+                movimientop.userId = recepcion;
+                movimientop.estado = "recibido";
+                return [4, (0, typeorm_1.getRepository)(movimientop_1.MovimientoP).save(movimientop)];
+            case 9:
+                result = _c.sent();
+                return [2, res.json({ result: result })];
+        }
+    });
+}); };
+exports.recibirMovimientop = recibirMovimientop;
+var listmovimientoventasp = function (req, res) { return tslib_1.__awaiter(void 0, void 0, void 0, function () {
+    var _a, limit, offset, tienda, hateoas, take, skip, where, tiendas, _b, result, count, _c, hateoasLink, pages, error_5;
+    var _d;
+    return tslib_1.__generator(this, function (_e) {
+        switch (_e.label) {
+            case 0:
+                _e.trys.push([0, 4, , 5]);
+                _a = req.query, limit = _a.limit, offset = _a.offset, tienda = _a.tienda;
+                hateoas = new utils_1.Hateoas({
+                    limit: limit ? "".concat(limit) : undefined,
+                    offset: offset
+                        ? "".concat(offset)
+                        : undefined,
+                });
+                take = hateoas.take;
+                skip = hateoas.skip;
+                where = {};
+                if (!(tienda != "")) return [3, 2];
+                return [4, (0, typeorm_1.getRepository)(entities_1.Shop).findOne({
+                        where: { id: tienda },
+                    })];
+            case 1:
+                tiendas = _e.sent();
+                if (!tiendas) {
+                    return [2, res.status(404).json({ message: "No existe la tienda" })];
+                }
+                where = {
+                    tienda: tiendas
+                };
+                _e.label = 2;
+            case 2: return [4, (0, typeorm_1.getRepository)(movimientop_1.MovimientoP).findAndCount({
+                    take: take,
+                    skip: skip * take,
+                    where: [
+                        tslib_1.__assign({ estado: 'pendiente' }, where)
+                    ],
+                    relations: ['tienda'],
+                    order: { fecha: "DESC" }
+                })];
+            case 3:
+                _b = _e.sent(), result = _b[0], count = _b[1];
+                _c = hateoas.hateoas({ count: count }), hateoasLink = _c[0], pages = _c[1];
+                return [2, result
+                        ? res.status(200).json({
+                            result: result,
+                            count: count,
+                            link: hateoasLink,
+                            pages: pages === 0 ? 1 : pages,
+                        })
+                        : res.status(404).json({ message: 'No existen movimientos' })];
+            case 4:
+                error_5 = _e.sent();
+                throw res.status(500).json({ message: (_d = error_5.message) !== null && _d !== void 0 ? _d : error_5 });
+            case 5: return [2];
+        }
+    });
+}); };
+exports.listmovimientoventasp = listmovimientoventasp;
