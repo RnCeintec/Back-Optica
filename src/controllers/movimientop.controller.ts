@@ -135,7 +135,7 @@ export const createmovimientop = async (req: Request, res: Response): Promise<Re
   
     const result = await getRepository(DetalleMovimientoP).save(detalle_movimientop);
       
-     const total = accesoriodata.stock - datos.cantidad
+    const total = accesoriodata.stock - datos.cantidad
     accesoriodata.stock =  total;
 
     const result2 = await updateProductInteractor(accesoriodata);
@@ -227,6 +227,7 @@ export const recibirMovimientop = async(req: Request, res: Response): Promise<Re
   
   const movimientop = await getRepository(MovimientoP).findOne({where:{id:idmovimientop},relations: ['detallesmovimientop']})
 
+
   if (!movimientop ) {
     return res.status(404).json({ message: "No existe movimiento" })
   }
@@ -244,13 +245,16 @@ export const recibirMovimientop = async(req: Request, res: Response): Promise<Re
    stock0.cant_tienda = detalle.cantidad
    stock0.smt = 0
    const results = await getRepository(Stock).save(stock0)
-
-     return res.json({ message: "Stock de productos creado" })
+   
+     
    }
-   stock.cant_tienda = stock.cant_tienda + detalle.cantidad
- 
-   const result0 = await getRepository(Stock).save(stock)
 
+   else{ 
+    stock.cant_tienda = stock.cant_tienda + detalle.cantidad
+    const result0 = await getRepository(Stock).save(stock)
+  
+   
+  }
 
 
   }

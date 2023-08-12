@@ -239,7 +239,7 @@ var recibirMovimientop = function (req, res) { return tslib_1.__awaiter(void 0, 
                 return [4, (0, typeorm_1.getRepository)(entities_3.Stock).save(stock0)];
             case 4:
                 results = _c.sent();
-                return [2, res.json({ message: "Stock de productos creado" })];
+                return [3, 7];
             case 5:
                 stock.cant_tienda = stock.cant_tienda + detalle.cantidad;
                 return [4, (0, typeorm_1.getRepository)(entities_3.Stock).save(stock)];

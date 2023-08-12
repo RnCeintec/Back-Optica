@@ -11,7 +11,7 @@ import {
 
   import { Accesorio } from './accesorio';
   import { Shop } from './shop';
-  import { Movimiento } from './movimiento';
+  import { MovimientoP } from './movimientop';
   import { User } from '.'; 
 
   @Entity({ name: 'detallemovimientop' })
@@ -23,9 +23,9 @@ import {
     @Column()
     movimientoId!: number;
 
-    @ManyToOne(((type)=>Movimiento))
+    @ManyToOne(((type)=>MovimientoP))
     @JoinColumn()
-    movimiento!:Movimiento;
+    movimiento!:MovimientoP;
 
 
     @Column()
